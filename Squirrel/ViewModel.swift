@@ -30,7 +30,7 @@ class ViewModel: NSObject, ObservableObject {
     let scrollInactivityTimeout = CGFloat(1)
     let scrollCancelDistanceVertical = CGFloat(16)
     let scrollCancelDistanceHorizontal = CGFloat(8)
-    let scrollFrequency = CGFloat(0.05)
+    let scrollFrequency = CGFloat(0.02)
     let pointerLength = CGFloat(20)
 
     var timer: Timer?
@@ -38,7 +38,7 @@ class ViewModel: NSObject, ObservableObject {
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
     var pointerWindow: NSWindow?
-    var preventFurtherAction = false
+    var allowMomentumScroll = true
 
     override init() {
         super.init()
@@ -75,7 +75,6 @@ class ViewModel: NSObject, ObservableObject {
             .sink { [weak self] _ in
                 guard let self = self else { return }
 
-                print("Activity.")
                 self.stopScroll()
             }
             .store(in: &cancellables)
