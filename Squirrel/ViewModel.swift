@@ -24,13 +24,13 @@ class ViewModel: NSObject, ObservableObject {
 
     // MARK: - Scroll Properties
 
-    /// make it to the final value in 10 steps
-    let iterationsCount = 10
-    let deviceBezelInset = EdgeInsets(top: 150, leading: 20, bottom: 50, trailing: 20)
+    /// make it to the final value in 12 steps
+    let iterationsCount = 12
+    let deviceBezelInset = EdgeInsets(top: 180, leading: 20, bottom: 100, trailing: 20)
     let scrollInactivityTimeout = CGFloat(1)
     let scrollCancelDistanceVertical = CGFloat(16)
     let scrollCancelDistanceHorizontal = CGFloat(8)
-    let scrollFrequency = CGFloat(0.02)
+    let scrollFrequency = CGFloat(0.05)
     let pointerLength = CGFloat(20)
 
     var timer: Timer?
@@ -75,6 +75,7 @@ class ViewModel: NSObject, ObservableObject {
             .sink { [weak self] _ in
                 guard let self = self else { return }
 
+                print("Activity.")
                 self.stopScroll()
             }
             .store(in: &cancellables)

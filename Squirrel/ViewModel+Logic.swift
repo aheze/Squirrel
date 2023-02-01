@@ -14,21 +14,34 @@ extension ViewModel {
         timer = nil
 
         if let scrollInteraction {
-            let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: scrollInteraction.initialPoint, mouseButton: .left)
+            self.scrollInteraction = nil
+            preventFurtherAction = true
+            print("Stopping futher action.''")
+
+            let endPoint = CGPoint(
+                x: scrollInteraction.initialPoint.x,
+                y: scrollInteraction.initialPoint.y + scrollInteraction.deltaCompleted
+            )
+
+            let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: endPoint, mouseButton: .left)
             mouseUp?.post(tap: .cghidEventTap)
-            print("Moving!''")
 
-//            self.preventFurtherAction = true
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//                mouseUp?.post(tap: .cghidEventTap)
-//                self.preventFurtherAction = false
-//            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
+                CGWarpMouseCursorPosition(scrollInteraction.initialPoint)
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+                self.preventFurtherAction = false
+            }
         }
-
-        scrollInteraction = nil
     }
 
     func processScroll(event: NSEvent) {
+//        guard event.momentumPhase.rawValue == 0 else {
+//            stopScroll()
+//            return
+//        }
+
         guard enabled, !preventFurtherAction else {
             stopScroll()
             return
@@ -74,7 +87,9 @@ extension ViewModel {
         }()
 
         guard shouldContinue else {
-            if scrollInteraction != nil { stopScroll() }
+            if scrollInteraction != nil {
+                stopScroll()
+            }
             return
         }
 
@@ -88,6 +103,12 @@ extension ViewModel {
 
         if var scrollInteraction {
             scrollInteraction.targetDelta += delta
+
+//            guard abs(scrollInteraction.targetDelta) < 150 else {
+//                print("Stop!")
+//                stopScroll()
+//                return
+//            }
 
             let deltaPerStep = (scrollInteraction.targetDelta - scrollInteraction.deltaCompleted) / CGFloat(iterationsCount)
             scrollInteraction.deltaPerStep = deltaPerStep
@@ -106,10 +127,12 @@ extension ViewModel {
             let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: point, mouseButton: .left)
             mouseDown?.post(tap: .cghidEventTap)
 
+            print("Creating timer.''")
             timer = Timer.scheduledTimer(withTimeInterval: scrollFrequency, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
                 guard let scrollInteraction = self.scrollInteraction else { return }
                 guard !scrollInteraction.isComplete else {
+                    print("Inteactin complete.")
                     self.stopScroll()
                     return
                 }
