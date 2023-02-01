@@ -83,7 +83,6 @@ class ViewModel: NSObject, ObservableObject {
 
             if let scrollInteraction {
                 if self.pointerWindow == nil {
-                    CGDisplayHideCursor(CGDirectDisplayID())
                     let pointerView = PointerView(viewModel: self)
                     let hostingController = NSHostingController(rootView: pointerView)
                     let window = NSWindow(contentViewController: hostingController)
@@ -110,7 +109,6 @@ class ViewModel: NSObject, ObservableObject {
                     guard self.scrollInteraction == nil else { return }
                     self.pointerWindow?.close()
                     self.pointerWindow = nil
-                    CGDisplayShowCursor(CGDirectDisplayID())
                 }
             }
         }

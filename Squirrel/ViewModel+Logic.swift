@@ -35,10 +35,6 @@ extension ViewModel {
         let frames = getSimulatorWindowFrames()
 
         let shouldContinue: Bool = {
-            if scrollInteraction != nil {
-                return true
-            }
-
             let intersectingFrame = frames.first(where: { $0.contains(point) })
 
             if let intersectingFrame {
