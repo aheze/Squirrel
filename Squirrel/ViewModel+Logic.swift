@@ -29,7 +29,37 @@ extension ViewModel {
         if let scrollInteraction {
             self.scrollInteraction = nil
 
+            let endPoint = CGPoint(
+                x: scrollInteraction.initialPoint.x,
+                y: scrollInteraction.initialPoint.y + scrollInteraction.deltaCompleted
+            )
+
+            let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: endPoint, mouseButton: .left)
+            mouseUp?.post(tap: .cghidEventTap)
+
+//            let tap = {
+//                let point = convertPointToScreen(point: NSEvent.mouseLocation)
+//                let frames = getSimulatorWindowFrames()
+//                if let intersectingFrame = frames.first(where: { $0.contains(point) }) {
+//                    let point = CGPoint(
+//                        x: intersectingFrame.maxX - 10,
+//                        y: intersectingFrame.minY + 10
+//                    )
+//
+//                    let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: point, mouseButton: .left)
+//                    mouseDown?.post(tap: .cghidEventTap)
+//
+//                    let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: point, mouseButton: .left)
+//                    mouseUp?.post(tap: .cghidEventTap)
+//
+//                    CGWarpMouseCursorPosition(scrollInteraction.initialPoint)
+//                }
+//
+//            }()
+
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
             CGWarpMouseCursorPosition(scrollInteraction.initialPoint)
+//            }
         }
     }
 
