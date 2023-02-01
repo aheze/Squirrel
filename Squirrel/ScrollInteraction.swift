@@ -15,10 +15,7 @@ struct ScrollInteraction {
     var deltaCompleted = CGFloat(0)
 
     var isComplete: Bool {
-        if targetDelta >= 0 {
-            return deltaCompleted > targetDelta
-        } else {
-            return deltaCompleted < targetDelta
-        }
+        /// Use 0.05 as a threshold in case the floating-point accuracy is lost
+        return abs(deltaCompleted - targetDelta) < 0.05
     }
 }

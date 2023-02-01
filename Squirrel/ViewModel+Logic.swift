@@ -81,8 +81,10 @@ extension ViewModel {
 
         if var scrollInteraction {
             scrollInteraction.targetDelta += delta
+
             let deltaPerStep = (scrollInteraction.targetDelta - scrollInteraction.deltaCompleted) / CGFloat(iterationsCount)
             scrollInteraction.deltaPerStep = deltaPerStep
+
             self.scrollInteraction = scrollInteraction
         } else {
             let deltaPerStep = delta / CGFloat(iterationsCount)
