@@ -9,17 +9,6 @@
 import Cocoa
 
 extension ViewModel {
-    func processMove(event: NSEvent) {
-        if let scrollInteraction {
-            let point = getPoint(event: event)
-
-            /// make sure it moved a distance (prevent activating buttons)
-            guard abs(point.y - scrollInteraction.initialPoint.y) > scrollCancelDistance else { return }
-
-            stopScroll()
-        }
-    }
-
     func stopScroll() {
         timer?.invalidate()
         timer = nil
@@ -32,7 +21,28 @@ extension ViewModel {
         scrollInteraction = nil
     }
 
+    func processMove(event: NSEvent) {
+        guard enabled else {
+            stopScroll()
+            return
+        }
+
+        if let scrollInteraction {
+            let point = getPoint(event: event)
+
+            /// make sure it moved a distance (prevent activating buttons)
+            guard abs(point.y - scrollInteraction.initialPoint.y) > scrollCancelDistance else { return }
+
+            stopScroll()
+        }
+    }
+
     func processScroll(event: NSEvent) {
+        guard enabled else {
+            stopScroll()
+            return
+        }
+
         scrollEventActivityCounter.send()
         let point = getPoint(event: event)
 
@@ -69,16 +79,24 @@ extension ViewModel {
             return
         }
 
+        let delta: CGFloat = {
+            if naturalScrolling {
+                return event.scrollingDeltaY
+            } else {
+                return event.scrollingDeltaY * -1
+            }
+        }()
+
         if var scrollInteraction {
-            scrollInteraction.targetDelta += event.scrollingDeltaY
+            scrollInteraction.targetDelta += delta
             let deltaPerStep = (scrollInteraction.targetDelta - scrollInteraction.deltaCompleted) / CGFloat(iterationsCount)
             scrollInteraction.deltaPerStep = deltaPerStep
             self.scrollInteraction = scrollInteraction
         } else {
-            let deltaPerStep = event.scrollingDeltaY / CGFloat(iterationsCount)
+            let deltaPerStep = delta / CGFloat(iterationsCount)
             let scrollInteraction = ScrollInteraction(
                 initialPoint: point,
-                targetDelta: event.scrollingDeltaY,
+                targetDelta: delta,
                 deltaPerStep: deltaPerStep
             )
             self.scrollInteraction = scrollInteraction

@@ -10,6 +10,11 @@ import Combine
 import SwiftUI
 
 class ViewModel: NSObject, ObservableObject {
+    // MARK: - Storage
+
+    @AppStorage("enabled") var enabled = true
+    @AppStorage("naturalScrolling") var naturalScrolling = true
+
     // MARK: - Status Bar Properties
 
     var statusBar = NSStatusBar()
@@ -37,7 +42,7 @@ class ViewModel: NSObject, ObservableObject {
         statusItem = statusBar.statusItem(withLength: 28.0)
 
         if let statusBarButton = statusItem.button {
-            statusBarButton.image = NSImage(systemSymbolName: "plus", accessibilityDescription: nil)
+            statusBarButton.image = NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: nil)
             statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
             statusBarButton.image?.isTemplate = true
             statusBarButton.action = #selector(togglePopover)
@@ -90,7 +95,7 @@ class ViewModel: NSObject, ObservableObject {
     func showPopover(_ sender: AnyObject) {
         if let statusBarButton = statusItem.button {
             popover?.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
-            
+
             /// From https://stackoverflow.com/a/73322639/14351818 - to dismiss the popover after tapping outside
             popover?.contentViewController?.view.window?.makeKey()
         }
