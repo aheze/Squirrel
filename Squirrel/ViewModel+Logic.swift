@@ -16,13 +16,20 @@ extension ViewModel {
         if let scrollInteraction {
             let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: scrollInteraction.initialPoint, mouseButton: .left)
             mouseUp?.post(tap: .cghidEventTap)
+            print("Moving!''")
+
+//            self.preventFurtherAction = true
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                mouseUp?.post(tap: .cghidEventTap)
+//                self.preventFurtherAction = false
+//            }
         }
 
         scrollInteraction = nil
     }
 
     func processScroll(event: NSEvent) {
-        guard enabled else {
+        guard enabled, !preventFurtherAction else {
             stopScroll()
             return
         }
@@ -86,6 +93,7 @@ extension ViewModel {
             scrollInteraction.deltaPerStep = deltaPerStep
 
             self.scrollInteraction = scrollInteraction
+
         } else {
             let deltaPerStep = delta / CGFloat(iterationsCount)
             let scrollInteraction = ScrollInteraction(

@@ -38,6 +38,7 @@ class ViewModel: NSObject, ObservableObject {
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
     var pointerWindow: NSWindow?
+    var preventFurtherAction = false
 
     override init() {
         super.init()
