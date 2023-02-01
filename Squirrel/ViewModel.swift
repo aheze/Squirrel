@@ -6,6 +6,7 @@
 //  Copyright © 2023 A. Zheng. All rights reserved.
 //
 
+import ApplicationServices
 import Combine
 import SwiftUI
 
@@ -82,6 +83,7 @@ class ViewModel: NSObject, ObservableObject {
 
             if let scrollInteraction {
                 if self.pointerWindow == nil {
+                    CGDisplayHideCursor(CGDirectDisplayID())
                     let pointerView = PointerView(viewModel: self)
                     let hostingController = NSHostingController(rootView: pointerView)
                     let window = NSWindow(contentViewController: hostingController)
@@ -89,23 +91,27 @@ class ViewModel: NSObject, ObservableObject {
                     window.backgroundColor = .clear
                     window.styleMask = .borderless
                     window.hasShadow = false
-                    window.makeKeyAndOrderFront(nil)
+                    window.orderFront(nil)
                     window.level = .init(rawValue: 100)
-
-                    let point = CGPoint(
-                        x: scrollInteraction.initialPoint.x - (self.pointerLength / 2),
-                        y: scrollInteraction.initialPoint.y + (self.pointerLength / 2)
-                    )
-
-                    let convertedPoint = self.convertPointToScreen(point: point)
-                    window.setFrameOrigin(convertedPoint)
 
                     self.pointerWindow = window
                 }
 
+                let point = CGPoint(
+                    x: scrollInteraction.initialPoint.x - (self.pointerLength / 2),
+                    y: scrollInteraction.initialPoint.y + (self.pointerLength / 2)
+                )
+
+                let convertedPoint = self.convertPointToScreen(point: point)
+                self.pointerWindow?.setFrameOrigin(convertedPoint)
             } else {
-                self.pointerWindow?.close()
-                self.pointerWindow = nil
+                /// Delay removing the window to allow a SwiftUI animation.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    guard self.scrollInteraction == nil else { return }
+                    self.pointerWindow?.close()
+                    self.pointerWindow = nil
+                    CGDisplayShowCursor(CGDirectDisplayID())
+                }
             }
         }
         .store(in: &cancellables)
