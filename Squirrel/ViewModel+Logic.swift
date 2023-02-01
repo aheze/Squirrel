@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ViewModel+Logic.swift
 //  Squirrel
 //
 //  Created by A. Zheng (github.com/aheze) on 1/31/23.
@@ -7,66 +7,8 @@
 //
 
 import Cocoa
-import Combine
-import CoreGraphics
-import SwiftUI
 
-struct ScrollInteraction {
-    var initialPoint: CGPoint
-    var targetDelta: CGFloat
-    var deltaPerStep: CGFloat
-    var deltaCompleted = CGFloat(0)
-
-    var isComplete: Bool {
-        if targetDelta >= 0 {
-            return deltaCompleted > targetDelta
-        } else {
-            return deltaCompleted < targetDelta
-        }
-    }
-}
-
-class ViewController: NSViewController {
-    /// make it to the final value in 10 steps
-    let iterationsCount = 10
-    let deviceBezelInset = EdgeInsets(top: 150, leading: 20, bottom: 50, trailing: 20)
-    let scrollInactivityTimeout = CGFloat(0.75)
-
-    var timer: Timer?
-    var scrollInteraction: ScrollInteraction?
-    var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
-    var cancellables = Set<AnyCancellable>()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
-            self.processMove(event: event)
-            return event
-        }
-        NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { event in
-            self.processMove(event: event)
-        }
-
-        NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { event in
-            self.processScroll(event: event)
-            return event
-        }
-
-        NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel]) { event in
-            self.processScroll(event: event)
-        }
-
-        scrollEventActivityCounter
-            .debounce(for: .seconds(scrollInactivityTimeout), scheduler: RunLoop.main)
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-
-                self.stopScroll()
-            }
-            .store(in: &cancellables)
-    }
-
+extension ViewModel {
     func processMove(event: NSEvent) {
         if let scrollInteraction {
             let point = getPoint(event: event)
@@ -161,50 +103,5 @@ class ViewController: NSViewController {
                 self.scrollInteraction?.deltaCompleted += scrollInteraction.deltaPerStep
             }
         }
-    }
-
-    func getPoint(event: NSEvent) -> CGPoint {
-        guard let screen = getScreenWithMouse() else { return .zero }
-        let point = CGPoint(x: event.locationInWindow.x, y: screen.frame.height - event.locationInWindow.y)
-        return point
-    }
-
-    func getScreenWithMouse() -> NSScreen? {
-        let mouseLocation = NSEvent.mouseLocation
-        let screens = NSScreen.screens
-        let screenWithMouse = (screens.first { NSMouseInRect(mouseLocation, $0.frame, false) })
-
-        return screenWithMouse
-    }
-
-    func getSimulatorWindowFrames() -> [CGRect] {
-        let windows = getWindows()
-        let frames: [CGRect] = windows.compactMap { window in
-            if let name = window["kCGWindowOwnerName"] as? String, name == "Simulator" {
-                if let frameDictionary = window["kCGWindowBounds"] as? [String: Int] {
-                    guard
-                        let x = frameDictionary["X"],
-                        let y = frameDictionary["Y"],
-                        let width = frameDictionary["Width"],
-                        let height = frameDictionary["Height"]
-                    else { return nil }
-
-                    let frame = CGRect(x: x, y: y, width: width, height: height)
-                    return frame
-                }
-            }
-            return nil
-        }
-
-        return frames
-    }
-
-    func getWindows() -> [[String: Any]] {
-        let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
-        let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
-        let infoList = windowsListInfo as! [[String: Any]]
-        let visibleWindows = infoList.filter { $0["kCGWindowLayer"] as! Int == 0 }
-
-        return visibleWindows
     }
 }
