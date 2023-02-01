@@ -66,7 +66,6 @@ extension ViewModel {
 
                 return true
             } else {
-                print("No intersecting frame. \(frames) vs \(point)")
                 return false
             }
         }()
