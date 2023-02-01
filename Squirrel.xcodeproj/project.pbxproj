@@ -15,6 +15,7 @@
 		3CCEE253298A201500783B28 /* ViewModel+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCEE252298A201500783B28 /* ViewModel+Utilities.swift */; };
 		3CCEE255298A212E00783B28 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCEE254298A212E00783B28 /* ContentView.swift */; };
 		3CCEE257298A223700783B28 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCEE256298A223700783B28 /* main.swift */; };
+		3CCEE259298A28D900783B28 /* PointerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCEE258298A28D900783B28 /* PointerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		3CCEE252298A201500783B28 /* ViewModel+Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModel+Utilities.swift"; sourceTree = "<group>"; };
 		3CCEE254298A212E00783B28 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3CCEE256298A223700783B28 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		3CCEE258298A28D900783B28 /* PointerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				3CCEE250298A1FFA00783B28 /* ViewModel+Logic.swift */,
 				3CCEE252298A201500783B28 /* ViewModel+Utilities.swift */,
 				3CCEE254298A212E00783B28 /* ContentView.swift */,
+				3CCEE258298A28D900783B28 /* PointerView.swift */,
 				3CCEE243298A1EE700783B28 /* Assets.xcassets */,
 				3CCEE248298A1EE700783B28 /* Squirrel.entitlements */,
 			);
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CCEE259298A28D900783B28 /* PointerView.swift in Sources */,
 				3CCEE242298A1EE500783B28 /* ScrollInteraction.swift in Sources */,
 				3CCEE257298A223700783B28 /* main.swift in Sources */,
 				3CCEE251298A1FFA00783B28 /* ViewModel+Logic.swift in Sources */,

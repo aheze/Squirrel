@@ -29,11 +29,13 @@ class ViewModel: NSObject, ObservableObject {
     let scrollInactivityTimeout = CGFloat(0.5)
     let scrollCancelDistance = CGFloat(10)
     let scrollFrequency = CGFloat(0.02)
+    let pointerLength = CGFloat(20)
 
     var timer: Timer?
-    var scrollInteraction: ScrollInteraction?
+    @Published var scrollInteraction: ScrollInteraction?
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
+    var pointerWindow: NSWindow?
 
     override init() {
         super.init()
@@ -80,6 +82,39 @@ class ViewModel: NSObject, ObservableObject {
                 self.stopScroll()
             }
             .store(in: &cancellables)
+
+        $scrollInteraction.sink { [weak self] scrollInteraction in
+            guard let self = self else { return }
+
+            if let scrollInteraction {
+                if self.pointerWindow == nil {
+                    let pointerView = PointerView(viewModel: self)
+                    let hostingController = NSHostingController(rootView: pointerView)
+                    let window = NSWindow(contentViewController: hostingController)
+                    window.isOpaque = false
+                    window.backgroundColor = .clear
+                    window.styleMask = .borderless
+                    window.hasShadow = false
+                    window.makeKeyAndOrderFront(nil)
+                    window.level = .init(rawValue: 100)
+
+                    let point = CGPoint(
+                        x: scrollInteraction.initialPoint.x - (self.pointerLength / 2),
+                        y: scrollInteraction.initialPoint.y + (self.pointerLength / 2)
+                    )
+
+                    let convertedPoint = self.convertPointToScreen(point: point)
+                    window.setFrameOrigin(convertedPoint)
+
+                    self.pointerWindow = window
+                }
+
+            } else {
+                self.pointerWindow?.close()
+                self.pointerWindow = nil
+            }
+        }
+        .store(in: &cancellables)
     }
 
     // MARK: - Status Bar Methods

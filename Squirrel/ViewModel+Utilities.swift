@@ -12,8 +12,13 @@ import Cocoa
 
 extension ViewModel {
     func getPoint(event: NSEvent) -> CGPoint {
+        let point = convertPointToScreen(point: event.locationInWindow)
+        return point
+    }
+    
+    func convertPointToScreen(point: CGPoint) -> CGPoint {
         guard let screen = getScreenWithMouse() else { return .zero }
-        let point = CGPoint(x: event.locationInWindow.x, y: screen.frame.height - event.locationInWindow.y)
+        let point = CGPoint(x: point.x, y: screen.frame.height - point.y)
         return point
     }
 
