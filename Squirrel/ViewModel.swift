@@ -26,7 +26,7 @@ class ViewModel: NSObject, ObservableObject {
     /// make it to the final value in 10 steps
     let iterationsCount = 10
     let deviceBezelInset = EdgeInsets(top: 150, leading: 20, bottom: 50, trailing: 20)
-    let scrollInactivityTimeout = CGFloat(0.5)
+    let scrollInactivityTimeout = CGFloat(1)
     let scrollCancelDistance = CGFloat(10)
     let scrollFrequency = CGFloat(0.02)
     let pointerLength = CGFloat(20)
@@ -75,6 +75,7 @@ class ViewModel: NSObject, ObservableObject {
         }
 
         scrollEventActivityCounter
+            .dropFirst()
             .debounce(for: .seconds(scrollInactivityTimeout), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self = self else { return }

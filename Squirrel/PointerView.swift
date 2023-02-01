@@ -16,5 +16,6 @@ struct PointerView: View {
         Circle()
             .fill(Color.purple)
             .frame(width: viewModel.pointerLength, height: viewModel.pointerLength)
+            .opacity(0.5)
     }
 }

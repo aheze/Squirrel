@@ -10,6 +10,7 @@ import Cocoa
 
 extension ViewModel {
     func stopScroll() {
+        print("TOP")
         timer?.invalidate()
         timer = nil
 
@@ -44,14 +45,19 @@ extension ViewModel {
         }
 
         scrollEventActivityCounter.send()
-        let point = getPoint(event: event)
+
+        /// `NSEvent.mouseLocation` seems to be more accurate than `event.locationInWindow`
+        let point = convertPointToScreen(point: NSEvent.mouseLocation)
 
         let frames = getSimulatorWindowFrames()
+
         let shouldContinue: Bool = {
             let intersectingFrame = frames.first(where: { $0.contains(point) })
 
             if let intersectingFrame {
-                guard let screen = getScreenWithMouse() else { return false }
+                guard let screen = getScreenWithMouse() else {
+                    return false
+                }
 
                 let screenHeightToWidthRatio = screen.frame.height / screen.frame.width
                 let simulatorHeightToWidthRatio = intersectingFrame.height / intersectingFrame.width
@@ -63,7 +69,10 @@ extension ViewModel {
                     insetFrame.origin.y += deviceBezelInset.top
                     insetFrame.size.width -= deviceBezelInset.leading + deviceBezelInset.trailing
                     insetFrame.size.height -= deviceBezelInset.top + deviceBezelInset.bottom
-                    if !insetFrame.contains(point) {
+
+                    let contains = insetFrame.contains(point)
+
+                    if !contains {
                         return false
                     }
                 }
