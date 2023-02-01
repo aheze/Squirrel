@@ -9,7 +9,6 @@
 import Cocoa
 import SwiftUI
 
-@main
 class AppDelegate: NSObject, NSApplicationDelegate {
     var viewModel: ViewModel?
     var popover = NSPopover()
