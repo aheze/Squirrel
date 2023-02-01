@@ -10,6 +10,14 @@ import Combine
 import SwiftUI
 
 class ViewModel: NSObject {
+    // MARK: - Status Bar Properties
+
+    var statusBar = NSStatusBar()
+    lazy var statusItem = statusBar.statusItem(withLength: 28.0)
+    var popover: NSPopover
+
+    // MARK: - Scroll Properties
+
     /// make it to the final value in 10 steps
     let iterationsCount = 10
     let deviceBezelInset = EdgeInsets(top: 150, leading: 20, bottom: 50, trailing: 20)
@@ -19,6 +27,26 @@ class ViewModel: NSObject {
     var scrollInteraction: ScrollInteraction?
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
+
+    init(popover: NSPopover) {
+        self.popover = popover
+        super.init()
+
+        statusBar = NSStatusBar()
+        statusItem = statusBar.statusItem(withLength: 28.0)
+
+        if let statusBarButton = statusItem.button {
+            statusBarButton.image = NSImage(systemSymbolName: "plus", accessibilityDescription: nil)
+            statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
+            statusBarButton.image?.isTemplate = true
+            statusBarButton.action = #selector(togglePopover)
+            statusBarButton.target = self
+        }
+
+        start()
+    }
+
+    // MARK: - Start Listening To Cursor Events
 
     func start() {
         NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
@@ -46,5 +74,25 @@ class ViewModel: NSObject {
                 self.stopScroll()
             }
             .store(in: &cancellables)
+    }
+
+    // MARK: - Status Bar Methods
+
+    @objc func togglePopover(sender: AnyObject) {
+        if popover.isShown {
+            hidePopover(sender)
+        } else {
+            showPopover(sender)
+        }
+    }
+
+    func showPopover(_ sender: AnyObject) {
+        if let statusBarButton = statusItem.button {
+            popover.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
+        }
+    }
+
+    func hidePopover(_ sender: AnyObject) {
+        popover.performClose(sender)
     }
 }
