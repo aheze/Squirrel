@@ -10,16 +10,17 @@ import Cocoa
 import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var viewModel: ViewModel?
-    var popover = NSPopover()
+    let viewModel = ViewModel()
+    let popover = NSPopover()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
 
-        let contentView = ContentView()
+        let contentView = ContentView(viewModel: viewModel)
+        popover.behavior = .transient
         popover.contentSize = NSSize(width: 360, height: 360)
         popover.contentViewController = NSHostingController(rootView: contentView)
-        viewModel = ViewModel(popover: popover)
+        viewModel.popover = popover
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

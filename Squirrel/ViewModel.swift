@@ -9,12 +9,12 @@
 import Combine
 import SwiftUI
 
-class ViewModel: NSObject {
+class ViewModel: NSObject, ObservableObject {
     // MARK: - Status Bar Properties
 
     var statusBar = NSStatusBar()
     lazy var statusItem = statusBar.statusItem(withLength: 28.0)
-    var popover: NSPopover
+    var popover: NSPopover?
 
     // MARK: - Scroll Properties
 
@@ -30,8 +30,7 @@ class ViewModel: NSObject {
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
 
-    init(popover: NSPopover) {
-        self.popover = popover
+    override init() {
         super.init()
 
         statusBar = NSStatusBar()
@@ -81,7 +80,7 @@ class ViewModel: NSObject {
     // MARK: - Status Bar Methods
 
     @objc func togglePopover(sender: AnyObject) {
-        if popover.isShown {
+        if popover?.isShown == true {
             hidePopover(sender)
         } else {
             showPopover(sender)
@@ -90,11 +89,14 @@ class ViewModel: NSObject {
 
     func showPopover(_ sender: AnyObject) {
         if let statusBarButton = statusItem.button {
-            popover.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
+            popover?.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
+            
+            /// From https://stackoverflow.com/a/73322639/14351818 - to dismiss the popover after tapping outside
+            popover?.contentViewController?.view.window?.makeKey()
         }
     }
 
     func hidePopover(_ sender: AnyObject) {
-        popover.performClose(sender)
+        popover?.performClose(sender)
     }
 }

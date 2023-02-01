@@ -9,17 +9,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var expand = false
-    
+    @ObservedObject var viewModel: ViewModel
+
     var body: some View {
         Text("Hi!")
             .frame(maxWidth: .infinity)
-            .frame(height: expand ? 400 : 200)
-            .background(Color.blue)
-            .onTapGesture {
-                withAnimation {
-                    expand.toggle()
-                }
-            }
+            .frame(height: 200)
     }
 }
