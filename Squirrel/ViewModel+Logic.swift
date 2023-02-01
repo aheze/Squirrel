@@ -14,7 +14,7 @@ extension ViewModel {
             let point = getPoint(event: event)
 
             /// make sure it moved a distance (prevent activating buttons)
-            guard abs(point.y - scrollInteraction.initialPoint.y) > 10 else { return }
+            guard abs(point.y - scrollInteraction.initialPoint.y) > scrollCancelDistance else { return }
 
             stopScroll()
         }
@@ -86,7 +86,7 @@ extension ViewModel {
             let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: point, mouseButton: .left)
             mouseDown?.post(tap: .cghidEventTap)
 
-            timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
+            timer = Timer.scheduledTimer(withTimeInterval: scrollFrequency, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
                 guard let scrollInteraction = self.scrollInteraction else { return }
                 guard !scrollInteraction.isComplete else {

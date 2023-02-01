@@ -21,7 +21,9 @@ class ViewModel: NSObject {
     /// make it to the final value in 10 steps
     let iterationsCount = 10
     let deviceBezelInset = EdgeInsets(top: 150, leading: 20, bottom: 50, trailing: 20)
-    let scrollInactivityTimeout = CGFloat(0.75)
+    let scrollInactivityTimeout = CGFloat(0.5)
+    let scrollCancelDistance = CGFloat(10)
+    let scrollFrequency = CGFloat(0.02)
 
     var timer: Timer?
     var scrollInteraction: ScrollInteraction?
