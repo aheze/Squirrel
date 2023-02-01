@@ -27,7 +27,8 @@ class ViewModel: NSObject, ObservableObject {
     let iterationsCount = 10
     let deviceBezelInset = EdgeInsets(top: 150, leading: 20, bottom: 50, trailing: 20)
     let scrollInactivityTimeout = CGFloat(1)
-    let scrollCancelDistance = CGFloat(10)
+    let scrollCancelDistanceVertical = CGFloat(16)
+    let scrollCancelDistanceHorizontal = CGFloat(8)
     let scrollFrequency = CGFloat(0.02)
     let pointerLength = CGFloat(20)
 
@@ -57,14 +58,6 @@ class ViewModel: NSObject, ObservableObject {
     // MARK: - Start Listening To Cursor Events
 
     func start() {
-        NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
-            self.processMove(event: event)
-            return event
-        }
-        NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { event in
-            self.processMove(event: event)
-        }
-
         NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { event in
             self.processScroll(event: event)
             return event

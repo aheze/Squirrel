@@ -10,7 +10,6 @@ import Cocoa
 
 extension ViewModel {
     func stopScroll() {
-        print("TOP")
         timer?.invalidate()
         timer = nil
 
@@ -20,22 +19,6 @@ extension ViewModel {
         }
 
         scrollInteraction = nil
-    }
-
-    func processMove(event: NSEvent) {
-        guard enabled else {
-            stopScroll()
-            return
-        }
-
-        if let scrollInteraction {
-            let point = getPoint(event: event)
-
-            /// make sure it moved a distance (prevent activating buttons)
-            guard abs(point.y - scrollInteraction.initialPoint.y) > scrollCancelDistance else { return }
-
-            stopScroll()
-        }
     }
 
     func processScroll(event: NSEvent) {
@@ -52,6 +35,10 @@ extension ViewModel {
         let frames = getSimulatorWindowFrames()
 
         let shouldContinue: Bool = {
+            if scrollInteraction != nil {
+                return true
+            }
+
             let intersectingFrame = frames.first(where: { $0.contains(point) })
 
             if let intersectingFrame {
@@ -79,6 +66,7 @@ extension ViewModel {
 
                 return true
             } else {
+                print("No intersecting frame. \(frames) vs \(point)")
                 return false
             }
         }()
@@ -117,6 +105,7 @@ extension ViewModel {
                 guard let self = self else { return }
                 guard let scrollInteraction = self.scrollInteraction else { return }
                 guard !scrollInteraction.isComplete else {
+                    self.stopScroll()
                     return
                 }
 
