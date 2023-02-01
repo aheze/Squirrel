@@ -60,13 +60,22 @@ class ViewModel: NSObject, ObservableObject {
     // MARK: - Start Listening To Cursor Events
 
     func start() {
-        NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { event in
-            self.processScroll(event: event)
+        NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { [weak self] event in
+            self?.processScroll(event: event)
             return event
         }
 
-        NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel]) { event in
-            self.processScroll(event: event)
+        NSEvent.addGlobalMonitorForEvents(matching: [.scrollWheel]) { [weak self] event in
+            self?.processScroll(event: event)
+        }
+
+        NSEvent.addLocalMonitorForEvents(matching: [.keyUp]) { [weak self] event in
+            self?.processKey(event: event)
+            return event
+        }
+
+        NSEvent.addGlobalMonitorForEvents(matching: [.keyUp]) { [weak self] event in
+            self?.processKey(event: event)
         }
 
         scrollEventActivityCounter

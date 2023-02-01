@@ -6,9 +6,22 @@
 //  Copyright © 2023 A. Zheng. All rights reserved.
 //
 
+import Carbon.HIToolbox
 import Cocoa
 
 extension ViewModel {
+    func processKey(event: NSEvent) {
+        switch Int(event.keyCode) {
+            case kVK_Escape:
+                if scrollInteraction != nil {
+                    allowMomentumScroll = false
+                }
+                stopScroll()
+            default:
+                break
+        }
+    }
+
     func stopScroll() {
         timer?.invalidate()
         timer = nil
@@ -35,9 +48,9 @@ extension ViewModel {
             if event.momentumPhase == .changed {
                 return
             }
-            if event.momentumPhase == .ended {
-                allowMomentumScroll = true
-            }
+        }
+        if event.momentumPhase == .ended {
+            allowMomentumScroll = true
         }
 
         guard enabled else {
