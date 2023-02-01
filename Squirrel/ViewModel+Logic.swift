@@ -29,17 +29,7 @@ extension ViewModel {
         if let scrollInteraction {
             self.scrollInteraction = nil
 
-            let endPoint = CGPoint(
-                x: scrollInteraction.initialPoint.x,
-                y: scrollInteraction.initialPoint.y + scrollInteraction.deltaCompleted
-            )
-
-            let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: endPoint, mouseButton: .left)
-            mouseUp?.post(tap: .cghidEventTap)
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
-                CGWarpMouseCursorPosition(scrollInteraction.initialPoint)
-            }
+            CGWarpMouseCursorPosition(scrollInteraction.initialPoint)
         }
     }
 
