@@ -101,3 +101,11 @@ public extension View {
         )
     }
 }
+
+extension View {
+    func menuBackground() -> some View {
+        padding(.horizontal, 12)
+            .background(Color.black.opacity(0.06))
+            .cornerRadius(6)
+    }
+}

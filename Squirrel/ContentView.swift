@@ -16,9 +16,18 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Squirrel")
-                .font(.title3)
-                .fontWeight(.bold)
+            HStack {
+                Text("Squirrel")
+                    .font(.title3)
+                    .fontWeight(.bold)
+
+                Spacer()
+
+                HStack(spacing: 8) {
+                    SocialButton(image: "Twitter", url: "https://twitter.com/aheze0")
+                    SocialButton(image: "GitHub", url: "https://github.com/aheze/Squirrel")
+                }
+            }
 
             VStack(alignment: .leading, spacing: 4.5) {
                 MenuToggleRow(title: "Enabled", isOn: $viewModel.enabled)
@@ -213,10 +222,24 @@ struct MenuToggleRow: View {
     }
 }
 
-extension View {
-    func menuBackground() -> some View {
-        padding(.horizontal, 12)
-            .background(Color.black.opacity(0.06))
-            .cornerRadius(6)
+struct SocialButton: View {
+    var image: String
+    var url: String
+
+    var body: some View {
+        Button {
+            if let url = URL(string: url) {
+                NSWorkspace.shared.open(url)
+            }
+        } label: {
+            Image(image)
+                .renderingMode(.template)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(NSColor.labelColor.color)
+                .opacity(0.5)
+        }
+        .buttonStyle(.plain)
+        .frame(width: 19, height: 19)
     }
 }
