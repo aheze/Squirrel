@@ -17,16 +17,16 @@ struct PointerView: View {
             .fill(
                 LinearGradient(
                     colors: [
-                        .teal,
-                        .green
+                        NSColor(hex: viewModel.color).color,
+                        NSColor(hex: viewModel.color).offset(by: 0.1).color
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
-            .frame(width: 20, height: 20)
-            .opacity((viewModel.scrollInteraction != nil) ? 1 : 0)
             .frame(width: viewModel.pointerLength, height: viewModel.pointerLength)
+            .opacity((viewModel.scrollInteraction != nil) ? 1 : 0)
+            .frame(width: viewModel.pointerWindowLength, height: viewModel.pointerWindowLength)
             .scaleEffect((viewModel.scrollInteraction != nil) ? 1 : 1.4)
             .animation(.spring(response: 0.2, dampingFraction: 1, blendDuration: 1), value: viewModel.scrollInteraction != nil)
     }

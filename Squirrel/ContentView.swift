@@ -23,11 +23,21 @@ struct ContentView: View {
                 MenuToggleRow(title: "Natural Scrolling", isOn: $viewModel.naturalScrolling)
 
                 HStack {
-                    Text("Color")
+                    Text("Pointer Color")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 8)
 
-                    ColorPicker("Color", selection: $color)
+                    ColorPicker("Pointer Color", selection: $color)
+                        .labelsHidden()
+                }
+                .menuBackground()
+                
+                HStack {
+                    Text("Pointer Size")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+
+                    ColorPicker("Pointer Color", selection: $color)
                         .labelsHidden()
                 }
                 .menuBackground()

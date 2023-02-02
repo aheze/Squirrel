@@ -33,8 +33,12 @@ class ViewModel: NSObject, ObservableObject {
     @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = CGFloat(20)
     @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = CGFloat(100)
     @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = CGFloat(1)
-    @AppStorage("pointerLength") var pointerLength = CGFloat(50)
+    @AppStorage("pointerLength") var pointerLength = CGFloat(20)
     @AppStorage("scrollFrequency") var scrollFrequency = CGFloat(0.015)
+    var pointerWindowLength: CGFloat {
+        pointerLength * 2
+    }
+    
     
     var timer: Timer?
     @Published var scrollInteraction: ScrollInteraction?
@@ -110,8 +114,8 @@ class ViewModel: NSObject, ObservableObject {
                 }
 
                 let point = CGPoint(
-                    x: scrollInteraction.initialPoint.x - (self.pointerLength / 2),
-                    y: scrollInteraction.initialPoint.y + (self.pointerLength / 2)
+                    x: scrollInteraction.initialPoint.x - (self.pointerWindowLength / 2),
+                    y: scrollInteraction.initialPoint.y + (self.pointerWindowLength / 2)
                 )
 
                 let convertedPoint = self.convertPointToScreen(point: point)
