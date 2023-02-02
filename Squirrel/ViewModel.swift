@@ -44,19 +44,19 @@ class ViewModel: NSObject, ObservableObject {
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
     var pointerWindow: NSWindow?
     var allowMomentumScroll = true
-    
+
     var cancellables = Set<AnyCancellable>()
     var redrawPreferences = PassthroughSubject<Void, Never>()
 
     override init() {
         super.init()
 
-        statusBar = NSStatusBar()
-        statusItem = statusBar.statusItem(withLength: 28.0)
+        statusBar = NSStatusBar.system
+        statusItem = statusBar.statusItem(withLength: NSStatusItem.squareLength)
 
         if let statusBarButton = statusItem.button {
-            statusBarButton.image = NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: nil)
-            statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
+            statusBarButton.image = NSImage(named: "MenuBarIcon")
+            statusBarButton.image?.size = NSSize(width: 18, height: 18)
             statusBarButton.image?.isTemplate = true
             statusBarButton.action = #selector(togglePopover)
             statusBarButton.target = self
