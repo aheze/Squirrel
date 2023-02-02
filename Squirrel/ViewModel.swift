@@ -25,14 +25,15 @@ class ViewModel: NSObject, ObservableObject {
     // MARK: - Scroll Properties
 
     /// make it to the final value in 10 steps
-    let iterationsCount = 10
-    let deviceBezelInset = EdgeInsets(top: 180, leading: 20, bottom: 100, trailing: 20)
-    let scrollInactivityTimeout = CGFloat(1)
-    let scrollCancelDistanceVertical = CGFloat(16)
-    let scrollCancelDistanceHorizontal = CGFloat(8)
-    let pointerLength = CGFloat(50)
-
-    var scrollFrequency = CGFloat(0.015)
+    @AppStorage("numberOfScrollSteps") var numberOfScrollSteps = 10
+    @AppStorage("deviceBezelInsetTop") var deviceBezelInsetTop = CGFloat(180)
+    @AppStorage("deviceBezelInsetLeft") var deviceBezelInsetLeft = CGFloat(20)
+    @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = CGFloat(20)
+    @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = CGFloat(100)
+    @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = CGFloat(1)
+    @AppStorage("pointerLength") var pointerLength = CGFloat(50)
+    @AppStorage("scrollFrequency") var scrollFrequency = CGFloat(0.015)
+    
     var timer: Timer?
     @Published var scrollInteraction: ScrollInteraction?
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()

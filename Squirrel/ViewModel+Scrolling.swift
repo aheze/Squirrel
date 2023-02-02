@@ -1,5 +1,5 @@
 //
-//  ViewModel+Logic.swift
+//  ViewModel+Scrolling.swift
 //  Squirrel
 //
 //  Created by A. Zheng (github.com/aheze) on 1/31/23.
@@ -77,10 +77,10 @@ extension ViewModel {
                 /// if the ratios match, the simulator is in full screen mode.
                 if simulatorHeightToWidthRatio > screenHeightToWidthRatio {
                     var insetFrame = intersectingFrame
-                    insetFrame.origin.x += deviceBezelInset.leading
-                    insetFrame.origin.y += deviceBezelInset.top
-                    insetFrame.size.width -= deviceBezelInset.leading + deviceBezelInset.trailing
-                    insetFrame.size.height -= deviceBezelInset.top + deviceBezelInset.bottom
+                    insetFrame.origin.x += deviceBezelInsetLeft
+                    insetFrame.origin.y += deviceBezelInsetTop
+                    insetFrame.size.width -= deviceBezelInsetLeft + deviceBezelInsetRight
+                    insetFrame.size.height -= deviceBezelInsetTop + deviceBezelInsetBottom
 
                     let contains = insetFrame.contains(point)
 
@@ -121,13 +121,13 @@ extension ViewModel {
         if var scrollInteraction {
             scrollInteraction.targetDelta += delta
 
-            let deltaPerStep = (scrollInteraction.targetDelta - scrollInteraction.deltaCompleted) / CGFloat(iterationsCount)
+            let deltaPerStep = (scrollInteraction.targetDelta - scrollInteraction.deltaCompleted) / CGFloat(numberOfScrollSteps)
             scrollInteraction.deltaPerStep = deltaPerStep
 
             self.scrollInteraction = scrollInteraction
 
         } else {
-            let deltaPerStep = delta / CGFloat(iterationsCount)
+            let deltaPerStep = delta / CGFloat(numberOfScrollSteps)
             let scrollInteraction = ScrollInteraction(
                 initialPoint: point,
                 targetDelta: delta,
