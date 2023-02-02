@@ -7,15 +7,22 @@ A menu bar app that adds scrolling to the simulator.
 
 - For some reason, you can't scroll in Xcode's simulator.
 - This app enables scrolling again!
-- Features: customizable settings, and a cute squirrel.
+- Features: customizable settings, made with SwiftUI, and a cute squirrel.
 - [Download](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip) here.
-
 
 ## Community
 
 Author | Contributing | Need Help?
 --- | --- | ---
 Prism is made by [aheze](https://github.com/aheze). | All contributions are welcome. Just [fork](https://github.com/aheze/Squirrel/fork) the repo, then make a pull request. | Open an [issue](https://github.com/aheze/Squirrel/issues) or join the [Discord server](https://discord.com/invite/Pmq8fYcus2). You can also ping me on [Twitter](https://twitter.com/aheze0). Or read the source code — there's lots of comments.
+
+### How does it work?
+
+Squirrel uses your Mac's accessibility controls to simulate a "drag" gesture.
+
+### Apple, if you're reading this:
+
+Please add native scroll support to the Simulator! Feels like such a small feature but it'll be very welcome.
 
 ## License
 
