@@ -1,7 +1,7 @@
 <img src="Assets/Logo.png" width="120" alt="Logo">
 
-# Squirrel*
-**Pronounced: Scroll-Wheel*
+# Squirrel
+🐿️ *Pronounced: Scroll-Wheel*
 
 A menu bar app that adds scrolling to the simulator.
 
