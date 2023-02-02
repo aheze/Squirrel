@@ -30,19 +30,23 @@ extension ViewModel {
         return screenWithMouse
     }
 
-    func getWindows() -> [[String: Any]] {
+    func getWindowInformation() -> [[String: Any]] {
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
         let infoList = windowsListInfo as! [[String: Any]]
-        let visibleWindows = infoList.filter { $0["kCGWindowLayer"] as! Int == 0 }
 
-        return visibleWindows
+        /// Topmost window is first in this array.
+        let visibleWindowInformation = infoList.filter { $0["kCGWindowLayer"] as! Int == 0 }
+
+//        print("visibleWindows: \(visibleWindowInformation.map { $0["kCGWindowOwnerName"] })")
+//        print("visibleWindows: \(visibleWindows)")
+        return visibleWindowInformation
     }
 
-    func getSimulatorWindowFrames() -> [CGRect] {
-        let windows = getWindows()
-        let frames: [CGRect] = windows.compactMap { window in
-            if let name = window["kCGWindowOwnerName"] as? String, name == "Simulator" {
+    func getWindows() -> [(name: String, frame: CGRect)] {
+        let windowInformation = getWindowInformation()
+        let windows: [(String, CGRect)] = windowInformation.compactMap { window in
+            if let name = window["kCGWindowOwnerName"] as? String {
                 if let frameDictionary = window["kCGWindowBounds"] as? [String: Int] {
                     guard
                         let x = frameDictionary["X"],
@@ -52,12 +56,52 @@ extension ViewModel {
                     else { return nil }
 
                     let frame = CGRect(x: x, y: y, width: width, height: height)
-                    return frame
+                    return (name, frame)
                 }
             }
             return nil
         }
+        return windows
+    }
 
-        return frames
+    /**
+     - parameter frames: The simulator window frames, inset by the specified bezel insets.
+     - parameter ignoredFrames: Portions of overlapping windows. Ignore scrolling if the mouse is within these frames.
+     */
+    func getSimulatorWindowFrames() -> (simulatorFrames: [CGRect], ignoredFrames: [CGRect]) {
+        let windows = getWindows()
+
+        var simulatorFrames = [CGRect]()
+        var ignoredFrames = [CGRect]()
+
+        for index in windows.indices {
+            let window = windows[index]
+            if window.name == "Simulator" {
+                var frame = window.frame
+
+                frame.origin.x += deviceBezelInsetLeft
+                frame.origin.y += deviceBezelInsetTop
+                frame.size.width -= deviceBezelInsetLeft + deviceBezelInsetRight
+                frame.size.height -= deviceBezelInsetTop + deviceBezelInsetBottom
+
+                simulatorFrames.append(frame)
+
+                let windowsInFront = windows.prefix(index)
+                for windowInFront in windowsInFront {
+                    if frame.intersects(windowInFront.frame) {
+                        let intersection = frame.intersection(windowInFront.frame)
+                        ignoredFrames.append(intersection)
+                    }
+                }
+            }
+        }
+
+        return (simulatorFrames, ignoredFrames)
     }
 }
+
+//
+// frame.origin.x += deviceBezelInsetLeft
+// frame.origin.y += deviceBezelInsetTop
+// frame.size.width -= deviceBezelInsetLeft + deviceBezelInsetRight
+// frame.size.height -= deviceBezelInsetTop + deviceBezelInsetBottom

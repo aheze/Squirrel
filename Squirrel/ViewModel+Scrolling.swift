@@ -42,29 +42,34 @@ extension ViewModel {
     }
 
     func processScroll(event: NSEvent) {
-        if !allowMomentumScroll {
-            if event.momentumPhase == .changed {
-                return
-            }
-        }
-        if event.momentumPhase == .ended {
-            allowMomentumScroll = true
-        }
-
         guard enabled else {
             stopScroll()
             return
         }
 
-        scrollEventActivityCounter.send()
-
         /// `NSEvent.mouseLocation` seems to be more accurate than `event.locationInWindow`
         let point = convertPointToScreen(point: NSEvent.mouseLocation)
+        let (simulatorFrames, ignoredFrames) = getSimulatorWindowFrames()
 
-        let frames = getSimulatorWindowFrames()
+        /// Just in case another window overlaps the simulator.
+        guard !ignoredFrames.contains(where: { $0.contains(point) }) else {
+            return
+        }
+
+        if !allowMomentumScroll {
+            if event.momentumPhase == .changed {
+                return
+            }
+        }
+
+        if event.momentumPhase == .ended {
+            allowMomentumScroll = true
+        }
+
+        scrollEventActivityCounter.send()
 
         let shouldContinue: Bool = {
-            let intersectingFrame = frames.first(where: { $0.contains(point) })
+            let intersectingFrame = simulatorFrames.first(where: { $0.contains(point) })
 
             if let intersectingFrame {
                 guard let screen = getScreenWithMouse() else {
