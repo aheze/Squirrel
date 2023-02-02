@@ -27,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("Error opening simulator!")
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + Preferences.simulatorCheckFrequency) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.simulatorCheckFrequency) { [weak self] in
             self?.checkIfSimulatorIsOpen()
         }
     }

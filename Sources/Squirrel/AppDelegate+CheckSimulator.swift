@@ -9,27 +9,24 @@ import Cocoa
 
 extension AppDelegate {
     func openSimulator() -> Bool {
-        guard !isSimulatorOpen() && Preferences.launchSimulatorOnStartup else { return true }
-        let url = URL(fileURLWithPath: Preferences.simulatorPath)
+        guard !isSimulatorOpen() && viewModel.launchSimulatorOnStartup else { return true }
+        let url = URL(fileURLWithPath: viewModel.simulatorPath)
         return NSWorkspace.shared.open(url)
     }
 
     func checkIfSimulatorIsOpen() {
-        if !isSimulatorOpen() && Preferences.quitIfSimulatorClosed {
-            print("Simulator is closed!")
+        if !isSimulatorOpen() && viewModel.quitIfSimulatorClosed {
             NSApplication.shared.terminate(self)
-        } else {
-            print("Simulator is open!")
         }
 
         // check every ten seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + Preferences.simulatorCheckFrequency) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.simulatorCheckFrequency) { [weak self] in
             self?.checkIfSimulatorIsOpen()
         }
     }
 
     func isSimulatorOpen() -> Bool {
-        let bundleUrl = URL(fileURLWithPath: Preferences.simulatorPath)
+        let bundleUrl = URL(fileURLWithPath: viewModel.simulatorPath)
         let applications = NSWorkspace.shared.runningApplications
         return applications.contains { app in
             app.bundleURL == bundleUrl

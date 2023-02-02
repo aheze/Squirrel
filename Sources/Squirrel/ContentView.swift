@@ -71,8 +71,16 @@ struct ContentView: View {
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Size", value: $viewModel.pointerLength)
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Opacity", value: $viewModel.pointerOpacity)
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Scale", value: $viewModel.pointerScaleRatio)
-                MenuToggleRow(title: "Launch Simulator On Startup", isOn: $viewModel.launchSimulatorOnStartup)
+                MenuToggleRow(title: "Launch Simulator On Startup", isOn: .init(get: {
+                    viewModel.launchSimulatorOnStartup
+                }, set: { newValue in
+                    viewModel.launchSimulatorOnStartup = newValue
+                    if newValue == false {
+                        viewModel.quitIfSimulatorClosed = false
+                    }
+                }))
                 MenuToggleRow(title: "Quit If Simulator Is Closed", isOn: $viewModel.quitIfSimulatorClosed)
+                    .disabled(viewModel.launchSimulatorOnStartup == false)
             }
 
             VStack(alignment: .leading, spacing: 4.5) {
