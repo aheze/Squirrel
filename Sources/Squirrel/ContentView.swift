@@ -9,13 +9,21 @@
 import Combine
 import SwiftUI
 
+/// The popover menu that's shown when you press the menu bar button.
 struct ContentView: View {
     @ObservedObject var viewModel: ViewModel
-    @State var color = NSColor(hex: 0x007EEF).color
+
+    /// Keep a local storage of the pointer color for more stable color picking.
+    @State var pointerColor = NSColor(hex: 0x007EEF).color
+
+    /// Keeps track of whether the advanced section is shown.
     @State var showingAdvanced = false
+
+    /// The total height of the main content inside the menu.
     @State var contentHeight = Preferences.menuMaximumHeight
 
     var body: some View {
+        /// Prevent the content from surpassing `menuMaximumHeight`.
         let height: CGFloat = {
             if contentHeight < viewModel.menuMaximumHeight {
                 return contentHeight
@@ -33,16 +41,17 @@ struct ContentView: View {
         }
         .frame(width: viewModel.menuWidth, height: height, alignment: .topLeading)
         .onAppear {
-            color = NSColor(hex: viewModel.pointerColor).color
+            pointerColor = NSColor(hex: viewModel.pointerColor).color
         }
-        .onChange(of: color) { newValue in
+        .onChange(of: pointerColor) { newValue in
             viewModel.pointerColor = NSColor(newValue).hex
         }
         .onReceive(viewModel.redrawPreferences) { _ in
-            color = NSColor(hex: viewModel.pointerColor).color
+            pointerColor = NSColor(hex: viewModel.pointerColor).color
         }
     }
 
+    /// The main content inside the menu.
     var content: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -58,6 +67,7 @@ struct ContentView: View {
                 }
             }
 
+            /// Show a header when permissions aren't granted yet.
             if !viewModel.permissionsGranted {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Accessibility Permissions Needed")
@@ -92,7 +102,7 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 8)
 
-                    ColorPicker("Pointer Color", selection: $color)
+                    ColorPicker("Pointer Color", selection: $pointerColor)
                         .labelsHidden()
                 }
                 .menuBackground()
@@ -178,215 +188,6 @@ struct ContentView: View {
                     .padding(.top, 20)
                 }
             }
-        }
-    }
-}
-
-struct DoubleFieldRow: View {
-    @ObservedObject var viewModel: ViewModel
-    var title: String
-    @Binding var value: Double
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 8)
-
-            DoubleField(redrawPreferences: viewModel.redrawPreferences, value: $value)
-        }
-        .menuBackground()
-    }
-}
-
-struct IntFieldRow: View {
-    @ObservedObject var viewModel: ViewModel
-    var title: String
-    @Binding var value: Int
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 8)
-
-            IntField(redrawPreferences: viewModel.redrawPreferences, value: $value)
-        }
-        .menuBackground()
-    }
-}
-
-struct PathFieldRow: View {
-    @ObservedObject var viewModel: ViewModel
-    var title: String
-    @Binding var value: String
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(title)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 8)
-
-            PathField(redrawPreferences: viewModel.redrawPreferences, value: $value)
-                .offset(y: -8)
-        }
-        .menuBackground()
-    }
-}
-
-struct DoubleField: View {
-    var redrawPreferences: PassthroughSubject<Void, Never>
-    @Binding var value: Double
-    @State var text = ""
-    @FocusState var focused: Bool
-
-    var body: some View {
-        TextField("Number", text: $text)
-            .multilineTextAlignment(.trailing)
-            .fixedSize(horizontal: true, vertical: false)
-            .focused($focused)
-            .focusable(false)
-            .onSubmit {
-                let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                if let double = Double(text) {
-                    value = double
-                } else {
-                    self.text = "\(value)"
-                }
-                focused = false
-            }
-            .onAppear {
-                text = "\(value)"
-                focused = false
-            }
-            .onReceive(redrawPreferences) { _ in
-                text = "\(value)"
-                focused = false
-            }
-    }
-}
-
-struct IntField: View {
-    var redrawPreferences: PassthroughSubject<Void, Never>
-    @Binding var value: Int
-    @State var text = ""
-    @FocusState var focused: Bool
-
-    var body: some View {
-        TextField("Integer", text: $text)
-            .multilineTextAlignment(.trailing)
-            .fixedSize(horizontal: true, vertical: false)
-            .focused($focused)
-            .focusable(false)
-            .onSubmit {
-                let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                if let int = Int(text) {
-                    value = int
-                } else {
-                    self.text = "\(value)"
-                }
-                focused = false
-            }
-            .onAppear {
-                text = "\(value)"
-                focused = false
-            }
-            .onReceive(redrawPreferences) { _ in
-                text = "\(value)"
-                focused = false
-            }
-    }
-}
-
-struct PathField: View {
-    var redrawPreferences: PassthroughSubject<Void, Never>
-    @Binding var value: String
-    @State var text: String = ""
-    @FocusState var focused: Bool
-
-    var body: some View {
-        TextField("Integer", text: $text)
-            .multilineTextAlignment(.leading)
-            .focused($focused)
-            .focusable(false)
-            .onSubmit {
-                if FileManager.default.fileExists(atPath: text) {
-                    value = text
-                } else {
-                    self.text = "\(value)"
-                }
-                focused = false
-            }
-            .onAppear {
-                text = "\(value)"
-                focused = false
-            }
-            .onReceive(redrawPreferences) { _ in
-                text = "\(value)"
-                focused = false
-            }
-    }
-}
-
-struct MenuToggleRow: View {
-    var title: String
-    @Binding var isOn: Bool
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 8)
-
-            Toggle(title, isOn: $isOn)
-                .labelsHidden()
-        }
-        .menuBackground()
-        .onTapGesture {
-            isOn.toggle()
-        }
-    }
-}
-
-struct SocialButton: View {
-    var image: String
-    var url: String
-
-    var body: some View {
-        Button {
-            if let url = URL(string: url) {
-                NSWorkspace.shared.open(url)
-            }
-        } label: {
-            Image(image)
-                .renderingMode(.template)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .foregroundColor(NSColor.labelColor.color)
-                .opacity(0.5)
-        }
-        .buttonStyle(.plain)
-        .frame(width: 19, height: 19)
-    }
-}
-
-struct StepView: View {
-    var number: String
-    var title: String
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Text(number)
-                .fontDesign(.rounded)
-                .frame(width: 24, height: 24)
-                .background {
-                    Circle()
-                        .fill(.blue)
-                        .brightness(-0.2)
-                        .opacity(0.08)
-                }
-
-            Text(title)
         }
     }
 }
