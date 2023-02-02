@@ -144,6 +144,11 @@ struct ContentView: View {
                         DoubleFieldRow(viewModel: viewModel, title: "Simulator Check Frequency", value: $viewModel.simulatorCheckFrequency)
                     }
 
+                    Group {
+                        DoubleFieldRow(viewModel: viewModel, title: "Max Height", value: $viewModel.menuMaximumHeight)
+                        DoubleFieldRow(viewModel: viewModel, title: "Menu Width", value: $viewModel.menuWidth)
+                    }
+
                     Button {
                         viewModel.resetPreferences()
                     } label: {
@@ -302,7 +307,6 @@ struct PathField: View {
     var body: some View {
         TextField("Integer", text: $text)
             .multilineTextAlignment(.leading)
-//            .fixedSize(horizontal: true, vertical: false)
             .focused($focused)
             .focusable(false)
             .onSubmit {
