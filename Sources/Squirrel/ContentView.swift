@@ -71,6 +71,16 @@ struct ContentView: View {
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Size", value: $viewModel.pointerLength)
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Opacity", value: $viewModel.pointerOpacity)
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Scale", value: $viewModel.pointerScaleRatio)
+                MenuToggleRow(title: "Launch Simulator On Startup", isOn: .init(get: {
+                    viewModel.launchSimulatorOnStartup
+                }, set: { newValue in
+                    viewModel.launchSimulatorOnStartup = newValue
+                    if newValue == false {
+                        viewModel.quitIfSimulatorClosed = false
+                    }
+                }))
+                MenuToggleRow(title: "Quit If Simulator Is Closed", isOn: $viewModel.quitIfSimulatorClosed)
+                    .disabled(viewModel.launchSimulatorOnStartup == false)
             }
 
             VStack(alignment: .leading, spacing: 4.5) {
@@ -90,14 +100,20 @@ struct ContentView: View {
                 .buttonStyle(.plain)
 
                 if showingAdvanced {
-                    IntFieldRow(viewModel: viewModel, title: "Scroll Steps", value: $viewModel.numberOfScrollSteps)
-                    DoubleFieldRow(viewModel: viewModel, title: "Inactivity Timeout", value: $viewModel.scrollInactivityTimeout)
-                    DoubleFieldRow(viewModel: viewModel, title: "Scroll Interval", value: $viewModel.scrollInterval)
+                    Group {
+                        IntFieldRow(viewModel: viewModel, title: "Scroll Steps", value: $viewModel.numberOfScrollSteps)
+                        DoubleFieldRow(viewModel: viewModel, title: "Inactivity Timeout", value: $viewModel.scrollInactivityTimeout)
+                        DoubleFieldRow(viewModel: viewModel, title: "Scroll Interval", value: $viewModel.scrollInterval)
+                    }
 
-                    DoubleFieldRow(viewModel: viewModel, title: "Top Inset", value: $viewModel.deviceBezelInsetTop)
-                    DoubleFieldRow(viewModel: viewModel, title: "Left Inset", value: $viewModel.deviceBezelInsetLeft)
-                    DoubleFieldRow(viewModel: viewModel, title: "Right Inset", value: $viewModel.deviceBezelInsetRight)
-                    DoubleFieldRow(viewModel: viewModel, title: "Bottom Inset", value: $viewModel.deviceBezelInsetBottom)
+                    Group {
+                        DoubleFieldRow(viewModel: viewModel, title: "Top Inset", value: $viewModel.deviceBezelInsetTop)
+                        DoubleFieldRow(viewModel: viewModel, title: "Left Inset", value: $viewModel.deviceBezelInsetLeft)
+                        DoubleFieldRow(viewModel: viewModel, title: "Right Inset", value: $viewModel.deviceBezelInsetRight)
+                        DoubleFieldRow(viewModel: viewModel, title: "Bottom Inset", value: $viewModel.deviceBezelInsetBottom)
+                        PathFieldRow(viewModel: viewModel, title: "Simulator Location", value: $viewModel.simulatorPath)
+                        DoubleFieldRow(viewModel: viewModel, title: "Simulator Check Frequency", value: $viewModel.simulatorCheckFrequency)
+                    }
 
                     Button {
                         viewModel.resetPreferences()
@@ -177,6 +193,24 @@ struct IntFieldRow: View {
     }
 }
 
+struct PathFieldRow: View {
+    @ObservedObject var viewModel: ViewModel
+    var title: String
+    @Binding var value: String
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
+
+            PathField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+                .offset(y: -8)
+        }
+        .menuBackground()
+    }
+}
+
 struct DoubleField: View {
     var redrawPreferences: PassthroughSubject<Void, Never>
     @Binding var value: Double
@@ -225,6 +259,37 @@ struct IntField: View {
                 let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
                 if let int = Int(text) {
                     value = int
+                } else {
+                    self.text = "\(value)"
+                }
+                focused = false
+            }
+            .onAppear {
+                text = "\(value)"
+                focused = false
+            }
+            .onReceive(redrawPreferences) { _ in
+                text = "\(value)"
+                focused = false
+            }
+    }
+}
+
+struct PathField: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
+    @Binding var value: String
+    @State var text: String = ""
+    @FocusState var focused: Bool
+
+    var body: some View {
+        TextField("Integer", text: $text)
+            .multilineTextAlignment(.leading)
+//            .fixedSize(horizontal: true, vertical: false)
+            .focused($focused)
+            .focusable(false)
+            .onSubmit {
+                if FileManager.default.fileExists(atPath: text) {
+                    value = text
                 } else {
                     self.text = "\(value)"
                 }

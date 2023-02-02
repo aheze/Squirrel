@@ -19,6 +19,8 @@ class ViewModel: NSObject, ObservableObject {
     @AppStorage("pointerLength") var pointerLength = Preferences.pointerLength
     @AppStorage("pointerOpacity") var pointerOpacity = Preferences.pointerOpacity
     @AppStorage("pointerScaleRatio") var pointerScaleRatio = Preferences.pointerScaleRatio
+    @AppStorage("launchSimulatorOnStartup") var launchSimulatorOnStartup = Preferences.launchSimulatorOnStartup
+    @AppStorage("quitIfSimulatorClosed") var quitIfSimulatorClosed = Preferences.quitIfSimulatorClosed
 
     // MARK: - Status Bar Properties
 
@@ -36,6 +38,8 @@ class ViewModel: NSObject, ObservableObject {
     @AppStorage("deviceBezelInsetLeft") var deviceBezelInsetLeft = Preferences.deviceBezelInsetLeft
     @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = Preferences.deviceBezelInsetRight
     @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = Preferences.deviceBezelInsetBottom
+    @AppStorage("simulatorPath") var simulatorPath = Preferences.simulatorPath
+    @AppStorage("simulatorCheckFrequency") var simulatorCheckFrequency = Preferences.simulatorCheckFrequency
     var pointerWindowLength: CGFloat {
         pointerLength * 5
     }

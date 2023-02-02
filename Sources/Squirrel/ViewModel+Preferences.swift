@@ -15,6 +15,8 @@ enum Preferences {
     static var pointerLength = CGFloat(20)
     static var pointerOpacity = CGFloat(0.95)
     static var pointerScaleRatio = CGFloat(1.4)
+    static var launchSimulatorOnStartup: Bool = true
+    static var quitIfSimulatorClosed: Bool = true
     
     static var numberOfScrollSteps = 10
     static var scrollInactivityTimeout = CGFloat(1)
@@ -23,6 +25,8 @@ enum Preferences {
     static var deviceBezelInsetLeft = CGFloat(20)
     static var deviceBezelInsetRight = CGFloat(20)
     static var deviceBezelInsetBottom = CGFloat(100)
+    static var simulatorPath: String = "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/"
+    static var simulatorCheckFrequency: TimeInterval = 10
 }
 
 extension ViewModel {
@@ -35,7 +39,9 @@ extension ViewModel {
         pointerLength = Preferences.pointerLength
         pointerOpacity = Preferences.pointerOpacity
         pointerScaleRatio = Preferences.pointerScaleRatio
-        
+        launchSimulatorOnStartup = Preferences.launchSimulatorOnStartup
+        quitIfSimulatorClosed = Preferences.quitIfSimulatorClosed
+
         numberOfScrollSteps = Preferences.numberOfScrollSteps
         scrollInactivityTimeout = Preferences.scrollInactivityTimeout
         scrollInterval = Preferences.scrollInterval
@@ -43,5 +49,7 @@ extension ViewModel {
         deviceBezelInsetLeft = Preferences.deviceBezelInsetLeft
         deviceBezelInsetRight = Preferences.deviceBezelInsetRight
         deviceBezelInsetBottom = Preferences.deviceBezelInsetBottom
+        simulatorPath = Preferences.simulatorPath
+        simulatorCheckFrequency = Preferences.simulatorCheckFrequency
     }
 }
