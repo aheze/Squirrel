@@ -9,16 +9,13 @@ import Cocoa
 
 extension AppDelegate {
     func openSimulator() -> Bool {
+        guard !isSimulatorOpen() && Preferences.launchSimulatorOnStartup else { return true }
         let url = URL(fileURLWithPath: Preferences.simulatorPath)
         return NSWorkspace.shared.open(url)
     }
 
     func checkIfSimulatorIsOpen() {
-        let bundleUrl = URL(fileURLWithPath: Preferences.simulatorPath)
-        let applications = NSWorkspace.shared.runningApplications
-        if applications.first(where: { app in
-            app.bundleURL == bundleUrl
-        }) == nil {
+        if !isSimulatorOpen() && Preferences.quitIfSimulatorClosed {
             print("Simulator is closed!")
             NSApplication.shared.terminate(self)
         } else {
@@ -26,8 +23,16 @@ extension AppDelegate {
         }
 
         // check every ten seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + Preferences.simulatorCheckFrequency) { [weak self] in
             self?.checkIfSimulatorIsOpen()
+        }
+    }
+
+    func isSimulatorOpen() -> Bool {
+        let bundleUrl = URL(fileURLWithPath: Preferences.simulatorPath)
+        let applications = NSWorkspace.shared.runningApplications
+        return applications.contains { app in
+            app.bundleURL == bundleUrl
         }
     }
 }
