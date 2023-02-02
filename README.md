@@ -8,8 +8,14 @@ A menu bar app that adds scrolling to the simulator.
 - For some reason, you can't scroll in Xcode's simulator.
 - This app enables scrolling again!
 - Features: customizable settings, made with SwiftUI, and a cute squirrel.
-- [Download](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip) here.
 
+## Installation
+You can download Squirrel [directly](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip), or use Homebrew.
+
+```bash
+brew tap hkamran80/things
+brew install hkamran80/things/squirrel
+```
 
 ## Screenshots
 
