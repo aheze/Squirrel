@@ -30,39 +30,71 @@ class ViewModel: NSObject, ObservableObject {
 
     // MARK: - Scroll Properties
 
-    /// make it to the final value in 10 steps
+    /// Scroll in 10 increments to the final value.
     @AppStorage("numberOfScrollSteps") var numberOfScrollSteps = Preferences.numberOfScrollSteps
+
+    /// Stop scrolling after this timeout.
     @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = Preferences.scrollInactivityTimeout
+
+    /// How often to drag an increment.
     @AppStorage("scrollInterval") var scrollInterval = Preferences.scrollInterval
+
+    /// Insets to cancel out the device bezels.
     @AppStorage("deviceBezelInsetTop") var deviceBezelInsetTop = Preferences.deviceBezelInsetTop
     @AppStorage("deviceBezelInsetLeft") var deviceBezelInsetLeft = Preferences.deviceBezelInsetLeft
     @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = Preferences.deviceBezelInsetRight
     @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = Preferences.deviceBezelInsetBottom
+
+    /// The file path of the simulator.
     @AppStorage("simulatorPath") var simulatorPath = Preferences.simulatorPath
+
+    /// How often to check if the simulator is open.
     @AppStorage("simulatorCheckFrequency") var simulatorCheckFrequency = Preferences.simulatorCheckFrequency
+
+    /// The menu's maximum height.
     @AppStorage("menuMaximumHeight") var menuMaximumHeight = Preferences.menuMaximumHeight
+
+    /// The menu's width.
     @AppStorage("menuWidth") var menuWidth = Preferences.menuWidth
 
+    /// Multiply by the scale ratio to prevent clipping.
     var pointerWindowLength: CGFloat {
         pointerLength * pointerScaleRatio
     }
 
     // MARK: - General Properties
 
+    /// Keeps track of whether accessibility permissions are granted.
     @Published var permissionsGranted = false
+
+    /// The timer that scrolls incrementally.
     var timer: Timer?
+
+    /// The current scroll interaction.
     @Published var scrollInteraction: ScrollInteraction?
+
+    /// Keeps track of when to fire the timeout.
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
+
+    /// The window that contains the pointer.
     var pointerWindow: NSWindow?
+
+    /// True unless the cursor goes out of the simulator bounds, in which case stop further scroll action until scroll momentum stops.
     var allowMomentumScroll = true
 
+    /// Stores Combine sinks.
     var cancellables = Set<AnyCancellable>()
+
+    /// Stores the accessibility permissions sink.
     var permissionsCancellable: AnyCancellable?
+
+    /// When this is fired, redraw the menu.
     var redrawPreferences = PassthroughSubject<Void, Never>()
 
     override init() {
         super.init()
 
+        /// Add the menu bar item.
         statusBar = NSStatusBar.system
         statusItem = statusBar.statusItem(withLength: NSStatusItem.squareLength)
 
@@ -82,7 +114,7 @@ class ViewModel: NSObject, ObservableObject {
 
             if permissionsGranted {
                 self.start()
-                self.permissionsCancellable = nil
+                self.permissionsCancellable = nil /// Prevent calling `start` again.
             }
         }
 
@@ -126,6 +158,7 @@ class ViewModel: NSObject, ObservableObject {
             self?.processKey(event: event)
         }
 
+        /// Stop scrolling after a timeout.
         scrollEventActivityCounter
             .dropFirst()
             .debounce(for: .seconds(scrollInactivityTimeout), scheduler: RunLoop.main)
@@ -136,6 +169,7 @@ class ViewModel: NSObject, ObservableObject {
             }
             .store(in: &cancellables)
 
+        /// Show the pointer whenever there is a scroll interaction.
         $scrollInteraction.sink { [weak self] scrollInteraction in
             guard let self = self else { return }
 

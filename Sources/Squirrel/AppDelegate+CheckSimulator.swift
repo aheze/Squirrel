@@ -9,13 +9,13 @@ import Cocoa
 
 extension AppDelegate {
     func openSimulator() -> Bool {
-        guard !isSimulatorOpen() && viewModel.launchSimulatorOnStartup else { return true }
+        guard !isSimulatorOpen(), viewModel.launchSimulatorOnStartup else { return true }
         let url = URL(fileURLWithPath: viewModel.simulatorPath)
         if NSWorkspace.shared.open(url) {
             return true
         }
-        // if it failed to open the simulator, don't quit if simulator is closed
-        // as it will result in the app quitting right after startup
+        /// If it failed to open the simulator, don't quit if simulator is closed
+        /// As it will result in the app quitting right after startup
         viewModel.quitIfSimulatorClosed = false
         return false
     }
@@ -25,7 +25,7 @@ extension AppDelegate {
             NSApplication.shared.terminate(self)
         }
 
-        // check every ten seconds
+        /// Check every ten seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.simulatorCheckFrequency) { [weak self] in
             self?.checkIfSimulatorIsOpen()
         }

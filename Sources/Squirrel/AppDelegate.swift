@@ -16,13 +16,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let popover = NSPopover()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
-
         let contentView = ContentView(viewModel: viewModel)
         popover.behavior = .transient
         popover.contentSize = NSSize(width: 360, height: 360)
         popover.contentViewController = NSHostingController(rootView: contentView)
         viewModel.popover = popover
+        
+        /// Enable the delegate for listening to `popoverWillShow`.
         popover.delegate = viewModel
 
         if !openSimulator() {
@@ -34,9 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
+    func applicationWillTerminate(_ aNotification: Notification) {}
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
