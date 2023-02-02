@@ -40,15 +40,24 @@ struct ContentView: View {
                     NumberField(value: $viewModel.pointerLength)
                 }
                 .menuBackground()
+
+                HStack {
+                    Text("Pointer Opacity")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+
+                    NumberField(value: $viewModel.pointerOpacity)
+                }
+                .menuBackground()
             }
         }
         .frame(width: 200, alignment: .topLeading)
         .padding(12)
         .onAppear {
-            color = NSColor(hex: viewModel.color).color
+            color = NSColor(hex: viewModel.pointerColor).color
         }
         .onChange(of: color) { newValue in
-            viewModel.color = NSColor(newValue).hex
+            viewModel.pointerColor = NSColor(newValue).hex
         }
     }
 }
@@ -61,6 +70,7 @@ struct NumberField: View {
     var body: some View {
         TextField("Value", text: $text)
             .multilineTextAlignment(.trailing)
+            .fixedSize(horizontal: true, vertical: false)
             .focused($focused)
             .focusable(false)
             .onSubmit {

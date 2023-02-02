@@ -15,8 +15,9 @@ class ViewModel: NSObject, ObservableObject {
 
     @AppStorage("enabled") var enabled = true
     @AppStorage("naturalScrolling") var naturalScrolling = true
-    @AppStorage("color") var color = 0x007EEF
-    
+    @AppStorage("pointerColor") var pointerColor = 0x007EEF
+    @AppStorage("pointerLength") var pointerLength = CGFloat(20)
+    @AppStorage("pointerOpacity") var pointerOpacity = CGFloat(0.95)
 
     // MARK: - Status Bar Properties
 
@@ -33,13 +34,11 @@ class ViewModel: NSObject, ObservableObject {
     @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = CGFloat(20)
     @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = CGFloat(100)
     @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = CGFloat(1)
-    @AppStorage("pointerLength") var pointerLength = CGFloat(20)
     @AppStorage("scrollFrequency") var scrollFrequency = CGFloat(0.015)
     var pointerWindowLength: CGFloat {
         pointerLength * 2
     }
-    
-    
+
     var timer: Timer?
     @Published var scrollInteraction: ScrollInteraction?
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
@@ -154,8 +153,6 @@ class ViewModel: NSObject, ObservableObject {
     func hidePopover(_ sender: AnyObject) {
         popover?.performClose(sender)
     }
-    
-    
 }
 
 extension ViewModel: NSPopoverDelegate {
