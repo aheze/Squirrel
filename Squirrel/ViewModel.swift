@@ -29,12 +29,12 @@ class ViewModel: NSObject, ObservableObject {
 
     /// make it to the final value in 10 steps
     @AppStorage("numberOfScrollSteps") var numberOfScrollSteps = 10
+    @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = CGFloat(1)
+    @AppStorage("scrollInterval") var scrollInterval = CGFloat(0.015)
     @AppStorage("deviceBezelInsetTop") var deviceBezelInsetTop = CGFloat(180)
     @AppStorage("deviceBezelInsetLeft") var deviceBezelInsetLeft = CGFloat(20)
     @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = CGFloat(20)
     @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = CGFloat(100)
-    @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = CGFloat(1)
-    @AppStorage("scrollFrequency") var scrollFrequency = CGFloat(0.015)
     var pointerWindowLength: CGFloat {
         pointerLength * 2
     }

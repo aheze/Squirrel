@@ -138,7 +138,7 @@ extension ViewModel {
             let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: point, mouseButton: .left)
             mouseDown?.post(tap: .cghidEventTap)
 
-            timer = Timer.scheduledTimer(withTimeInterval: scrollFrequency, repeats: true) { [weak self] _ in
+            timer = Timer.scheduledTimer(withTimeInterval: scrollInterval, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
                 self.fireTimer()
             }
