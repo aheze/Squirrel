@@ -31,14 +31,13 @@ struct ContentView: View {
                         .labelsHidden()
                 }
                 .menuBackground()
-                
+
                 HStack {
                     Text("Pointer Size")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 8)
 
-                    ColorPicker("Pointer Color", selection: $color)
-                        .labelsHidden()
+                    NumberField(value: $viewModel.pointerLength)
                 }
                 .menuBackground()
             }
@@ -51,6 +50,32 @@ struct ContentView: View {
         .onChange(of: color) { newValue in
             viewModel.color = NSColor(newValue).hex
         }
+    }
+}
+
+struct NumberField: View {
+    @Binding var value: Double
+    @State var text = ""
+    @FocusState var focused: Bool
+
+    var body: some View {
+        TextField("Value", text: $text)
+            .multilineTextAlignment(.trailing)
+            .focused($focused)
+            .focusable(false)
+            .onSubmit {
+                let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                if let double = Double(text) {
+                    value = double
+                } else {
+                    self.text = "\(value)"
+                }
+                focused = false
+            }
+            .onAppear {
+                text = "\(value)"
+                focused = false
+            }
     }
 }
 
