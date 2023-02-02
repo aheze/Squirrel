@@ -15,6 +15,8 @@ enum Preferences {
     static var pointerLength = CGFloat(20)
     static var pointerOpacity = CGFloat(0.95)
     static var pointerScaleRatio = CGFloat(1.4)
+    static var launchSimulatorOnStartup: Bool = true
+    static var simulatorPath: String = "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/"
     
     static var numberOfScrollSteps = 10
     static var scrollInactivityTimeout = CGFloat(1)

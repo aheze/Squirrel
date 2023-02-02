@@ -22,6 +22,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.contentViewController = NSHostingController(rootView: contentView)
         viewModel.popover = popover
         popover.delegate = viewModel
+
+        if !openSimulator() {
+            print("Error opening simulator!")
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+            self?.checkIfSimulatorIsOpen()
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
