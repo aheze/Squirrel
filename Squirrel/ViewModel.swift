@@ -13,11 +13,11 @@ import SwiftUI
 class ViewModel: NSObject, ObservableObject {
     // MARK: - Preferences
 
-    @AppStorage("enabled") var enabled = true
-    @AppStorage("naturalScrolling") var naturalScrolling = true
-    @AppStorage("pointerColor") var pointerColor = 0x007EEF
-    @AppStorage("pointerLength") var pointerLength = CGFloat(20)
-    @AppStorage("pointerOpacity") var pointerOpacity = CGFloat(0.95)
+    @AppStorage("enabled") var enabled = Preferences.enabled
+    @AppStorage("naturalScrolling") var naturalScrolling = Preferences.naturalScrolling
+    @AppStorage("pointerColor") var pointerColor = Preferences.pointerColor
+    @AppStorage("pointerLength") var pointerLength = Preferences.pointerLength
+    @AppStorage("pointerOpacity") var pointerOpacity = Preferences.pointerOpacity
 
     // MARK: - Status Bar Properties
 
@@ -28,13 +28,13 @@ class ViewModel: NSObject, ObservableObject {
     // MARK: - Scroll Properties
 
     /// make it to the final value in 10 steps
-    @AppStorage("numberOfScrollSteps") var numberOfScrollSteps = 10
-    @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = CGFloat(1)
-    @AppStorage("scrollInterval") var scrollInterval = CGFloat(0.015)
-    @AppStorage("deviceBezelInsetTop") var deviceBezelInsetTop = CGFloat(180)
-    @AppStorage("deviceBezelInsetLeft") var deviceBezelInsetLeft = CGFloat(20)
-    @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = CGFloat(20)
-    @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = CGFloat(100)
+    @AppStorage("numberOfScrollSteps") var numberOfScrollSteps = Preferences.numberOfScrollSteps
+    @AppStorage("scrollInactivityTimeout") var scrollInactivityTimeout = Preferences.scrollInactivityTimeout
+    @AppStorage("scrollInterval") var scrollInterval = Preferences.scrollInterval
+    @AppStorage("deviceBezelInsetTop") var deviceBezelInsetTop = Preferences.deviceBezelInsetTop
+    @AppStorage("deviceBezelInsetLeft") var deviceBezelInsetLeft = Preferences.deviceBezelInsetLeft
+    @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = Preferences.deviceBezelInsetRight
+    @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = Preferences.deviceBezelInsetBottom
     var pointerWindowLength: CGFloat {
         pointerLength * 2
     }
@@ -42,9 +42,11 @@ class ViewModel: NSObject, ObservableObject {
     var timer: Timer?
     @Published var scrollInteraction: ScrollInteraction?
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
-    var cancellables = Set<AnyCancellable>()
     var pointerWindow: NSWindow?
     var allowMomentumScroll = true
+    
+    var cancellables = Set<AnyCancellable>()
+    var redrawPreferences = PassthroughSubject<Void, Never>()
 
     override init() {
         super.init()

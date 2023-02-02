@@ -6,6 +6,7 @@
 //  Copyright © 2023 A. Zheng. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 
 struct ContentView: View {
@@ -19,7 +20,7 @@ struct ContentView: View {
                 .font(.title3)
                 .fontWeight(.bold)
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 4.5) {
                 MenuToggleRow(title: "Enabled", isOn: $viewModel.enabled)
                 MenuToggleRow(title: "Natural Scrolling", isOn: $viewModel.naturalScrolling)
 
@@ -33,26 +34,11 @@ struct ContentView: View {
                 }
                 .menuBackground()
 
-                HStack {
-                    Text("Pointer Size")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 8)
-
-                    DoubleField(value: $viewModel.pointerLength)
-                }
-                .menuBackground()
-
-                HStack {
-                    Text("Pointer Opacity")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 8)
-
-                    DoubleField(value: $viewModel.pointerOpacity)
-                }
-                .menuBackground()
+                DoubleFieldRow(viewModel: viewModel, title: "Pointer Size", value: $viewModel.pointerLength)
+                DoubleFieldRow(viewModel: viewModel, title: "Pointer Opacity", value: $viewModel.pointerOpacity)
             }
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 4.5) {
                 Button {
                     showingAdvanced.toggle()
                 } label: {
@@ -69,68 +55,29 @@ struct ContentView: View {
                 .buttonStyle(.plain)
 
                 if showingAdvanced {
-                    HStack {
-                        Text("Scroll Steps")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
+                    IntFieldRow(viewModel: viewModel, title: "Scroll Steps", value: $viewModel.numberOfScrollSteps)
+                    DoubleFieldRow(viewModel: viewModel, title: "Inactivity Timeout", value: $viewModel.scrollInactivityTimeout)
+                    DoubleFieldRow(viewModel: viewModel, title: "Scroll Interval", value: $viewModel.scrollInterval)
 
-                        IntField(value: $viewModel.numberOfScrollSteps)
+                    DoubleFieldRow(viewModel: viewModel, title: "Top Inset", value: $viewModel.deviceBezelInsetTop)
+                    DoubleFieldRow(viewModel: viewModel, title: "Left Inset", value: $viewModel.deviceBezelInsetLeft)
+                    DoubleFieldRow(viewModel: viewModel, title: "Right Inset", value: $viewModel.deviceBezelInsetRight)
+                    DoubleFieldRow(viewModel: viewModel, title: "Bottom Inset", value: $viewModel.deviceBezelInsetBottom)
+
+                    Button {
+                        viewModel.resetPreferences()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Text("Reset Preferences")
+
+                            Image(systemName: "arrow.counterclockwise")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .font(.footnote.bold())
+                        .foregroundColor(NSColor.secondaryLabelColor.color)
                     }
-                    .menuBackground()
-
-                    HStack {
-                        Text("Inactivity Timeout")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-
-                        DoubleField(value: $viewModel.scrollInactivityTimeout)
-                    }
-                    .menuBackground()
-
-                    HStack {
-                        Text("Scroll Interval")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-
-                        DoubleField(value: $viewModel.scrollInterval)
-                    }
-                    .menuBackground()
-
-                    HStack {
-                        Text("Top Inset")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-
-                        DoubleField(value: $viewModel.deviceBezelInsetTop)
-                    }
-                    .menuBackground()
-
-                    HStack {
-                        Text("Left Inset")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-
-                        DoubleField(value: $viewModel.deviceBezelInsetLeft)
-                    }
-                    .menuBackground()
-
-                    HStack {
-                        Text("Right Inset")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-
-                        DoubleField(value: $viewModel.deviceBezelInsetRight)
-                    }
-                    .menuBackground()
-
-                    HStack {
-                        Text("Bottom Inset")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-
-                        DoubleField(value: $viewModel.deviceBezelInsetBottom)
-                    }
-                    .menuBackground()
+                    .buttonStyle(.plain)
+                    .padding(.top, 4)
                 }
             }
         }
@@ -142,10 +89,48 @@ struct ContentView: View {
         .onChange(of: color) { newValue in
             viewModel.pointerColor = NSColor(newValue).hex
         }
+        .onReceive(viewModel.redrawPreferences) { _ in
+            color = NSColor(hex: viewModel.pointerColor).color
+        }
+    }
+}
+
+struct DoubleFieldRow: View {
+    @ObservedObject var viewModel: ViewModel
+    var title: String
+    @Binding var value: Double
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 8)
+
+            DoubleField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+        }
+        .menuBackground()
+    }
+}
+
+struct IntFieldRow: View {
+    @ObservedObject var viewModel: ViewModel
+    var title: String
+    @Binding var value: Int
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 8)
+
+            IntField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+        }
+        .menuBackground()
     }
 }
 
 struct DoubleField: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
     @Binding var value: Double
     @State var text = ""
     @FocusState var focused: Bool
@@ -169,10 +154,15 @@ struct DoubleField: View {
                 text = "\(value)"
                 focused = false
             }
+            .onReceive(redrawPreferences) { _ in
+                text = "\(value)"
+                focused = false
+            }
     }
 }
 
 struct IntField: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
     @Binding var value: Int
     @State var text = ""
     @FocusState var focused: Bool
@@ -193,6 +183,10 @@ struct IntField: View {
                 focused = false
             }
             .onAppear {
+                text = "\(value)"
+                focused = false
+            }
+            .onReceive(redrawPreferences) { _ in
                 text = "\(value)"
                 focused = false
             }
@@ -222,7 +216,7 @@ struct MenuToggleRow: View {
 extension View {
     func menuBackground() -> some View {
         padding(.horizontal, 12)
-            .background(Color.black.opacity(0.08))
+            .background(Color.black.opacity(0.06))
             .cornerRadius(6)
     }
 }
