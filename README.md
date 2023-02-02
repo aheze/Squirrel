@@ -14,7 +14,7 @@ A menu bar app that adds scrolling to the simulator.
 
 Author | Contributing | Need Help?
 --- | --- | ---
-Prism is made by [aheze](https://github.com/aheze). | All contributions are welcome. Just [fork](https://github.com/aheze/Squirrel/fork) the repo, then make a pull request. | Open an [issue](https://github.com/aheze/Squirrel/issues) or join the [Discord server](https://discord.com/invite/Pmq8fYcus2). You can also ping me on [Twitter](https://twitter.com/aheze0). Or read the source code — there's lots of comments.
+Squirrel is made by [aheze](https://github.com/aheze). | All contributions are welcome. Just [fork](https://github.com/aheze/Squirrel/fork) the repo, then make a pull request. | Open an [issue](https://github.com/aheze/Squirrel/issues) or join the [Discord server](https://discord.com/invite/Pmq8fYcus2). You can also ping me on [Twitter](https://twitter.com/aheze0). Or read the source code — there's lots of comments.
 
 ### How does it work?
 
