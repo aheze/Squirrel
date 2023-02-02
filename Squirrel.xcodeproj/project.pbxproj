@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C930E39298B474C001843D4 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C930E38298B474C001843D4 /* Utilities.swift */; };
 		3CCEE240298A1EE500783B28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCEE23F298A1EE500783B28 /* AppDelegate.swift */; };
 		3CCEE242298A1EE500783B28 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCEE241298A1EE500783B28 /* Models.swift */; };
 		3CCEE244298A1EE700783B28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CCEE243298A1EE700783B28 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C930E38298B474C001843D4 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		3CCEE23C298A1EE500783B28 /* Squirrel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Squirrel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CCEE23F298A1EE500783B28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3CCEE241298A1EE500783B28 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				3CCEE252298A201500783B28 /* ViewModel+Utilities.swift */,
 				3CCEE254298A212E00783B28 /* ContentView.swift */,
 				3CCEE258298A28D900783B28 /* PointerView.swift */,
+				3C930E38298B474C001843D4 /* Utilities.swift */,
 				3CCEE243298A1EE700783B28 /* Assets.xcassets */,
 				3CCEE248298A1EE700783B28 /* Squirrel.entitlements */,
 			);
@@ -151,6 +154,7 @@
 				3CCEE251298A1FFA00783B28 /* ViewModel+Scrolling.swift in Sources */,
 				3CCEE255298A212E00783B28 /* ContentView.swift in Sources */,
 				3CCEE24F298A1F2F00783B28 /* ViewModel.swift in Sources */,
+				3C930E39298B474C001843D4 /* Utilities.swift in Sources */,
 				3CCEE253298A201500783B28 /* ViewModel+Utilities.swift in Sources */,
 				3CCEE240298A1EE500783B28 /* AppDelegate.swift in Sources */,
 			);

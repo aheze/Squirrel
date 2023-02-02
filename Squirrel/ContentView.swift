@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var viewModel: ViewModel
+    @State var color = NSColor(hex: 0x007EEF).color
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -20,10 +21,26 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 4) {
                 MenuToggleRow(title: "Enabled", isOn: $viewModel.enabled)
                 MenuToggleRow(title: "Natural Scrolling", isOn: $viewModel.naturalScrolling)
+
+                HStack {
+                    Text("Color")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+
+                    ColorPicker("Color", selection: $color)
+                        .labelsHidden()
+                }
+                .menuBackground()
             }
         }
         .frame(width: 200, alignment: .topLeading)
         .padding(12)
+        .onAppear {
+            color = NSColor(hex: viewModel.color).color
+        }
+        .onChange(of: color) { newValue in
+            viewModel.color = NSColor(newValue).hex
+        }
     }
 }
 
@@ -40,12 +57,18 @@ struct MenuToggleRow: View {
             Toggle(title, isOn: $isOn)
                 .labelsHidden()
         }
-        .padding(.horizontal, 12)
-        .background(Color.black.opacity(0.08))
-        .cornerRadius(6)
-        .contentShape(Rectangle())
+        .menuBackground()
         .onTapGesture {
             isOn.toggle()
         }
+    }
+}
+
+extension View {
+    func menuBackground() -> some View {
+        padding(.horizontal, 12)
+            .background(Color.black.opacity(0.08))
+            .cornerRadius(6)
+            .contentShape(Rectangle())
     }
 }

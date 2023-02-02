@@ -30,6 +30,15 @@ extension ViewModel {
         return screenWithMouse
     }
 
+    func getWindows() -> [[String: Any]] {
+        let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
+        let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
+        let infoList = windowsListInfo as! [[String: Any]]
+        let visibleWindows = infoList.filter { $0["kCGWindowLayer"] as! Int == 0 }
+
+        return visibleWindows
+    }
+
     func getSimulatorWindowFrames() -> [CGRect] {
         let windows = getWindows()
         let frames: [CGRect] = windows.compactMap { window in
@@ -50,14 +59,5 @@ extension ViewModel {
         }
 
         return frames
-    }
-
-    func getWindows() -> [[String: Any]] {
-        let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
-        let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
-        let infoList = windowsListInfo as! [[String: Any]]
-        let visibleWindows = infoList.filter { $0["kCGWindowLayer"] as! Int == 0 }
-
-        return visibleWindows
     }
 }

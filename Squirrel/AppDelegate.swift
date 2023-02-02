@@ -21,6 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.contentSize = NSSize(width: 360, height: 360)
         popover.contentViewController = NSHostingController(rootView: contentView)
         viewModel.popover = popover
+        popover.delegate = viewModel
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

@@ -11,10 +11,12 @@ import Combine
 import SwiftUI
 
 class ViewModel: NSObject, ObservableObject {
-    // MARK: - Storage
+    // MARK: - Preferences
 
     @AppStorage("enabled") var enabled = true
     @AppStorage("naturalScrolling") var naturalScrolling = true
+    @AppStorage("color") var color = 0x007EEF
+    
 
     // MARK: - Status Bar Properties
 
@@ -147,5 +149,13 @@ class ViewModel: NSObject, ObservableObject {
 
     func hidePopover(_ sender: AnyObject) {
         popover?.performClose(sender)
+    }
+    
+    
+}
+
+extension ViewModel: NSPopoverDelegate {
+    func popoverWillShow(_ notification: Notification) {
+        NSApp.activate(ignoringOtherApps: true)
     }
 }
