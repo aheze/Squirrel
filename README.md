@@ -17,6 +17,8 @@ brew tap hkamran80/things
 brew install hkamran80/things/squirrel
 ```
 
+**Note:** Squirrel requires macOS Ventura (13.0) or higher.
+
 ## Screenshots
 
 <table>
