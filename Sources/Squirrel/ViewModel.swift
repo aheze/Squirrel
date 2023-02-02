@@ -40,8 +40,11 @@ class ViewModel: NSObject, ObservableObject {
     @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = Preferences.deviceBezelInsetBottom
     @AppStorage("simulatorPath") var simulatorPath = Preferences.simulatorPath
     @AppStorage("simulatorCheckFrequency") var simulatorCheckFrequency = Preferences.simulatorCheckFrequency
+    @AppStorage("menuMaximumHeight") var menuMaximumHeight = Preferences.menuMaximumHeight
+    @AppStorage("menuWidth") var menuWidth = Preferences.menuWidth
+
     var pointerWindowLength: CGFloat {
-        pointerLength * 5
+        pointerLength * pointerScaleRatio
     }
 
     // MARK: - General Properties

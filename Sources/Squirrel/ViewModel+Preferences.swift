@@ -17,7 +17,7 @@ enum Preferences {
     static var pointerScaleRatio = CGFloat(1.4)
     static var launchSimulatorOnStartup: Bool = true
     static var quitIfSimulatorClosed: Bool = true
-    
+
     static var numberOfScrollSteps = 10
     static var scrollInactivityTimeout = CGFloat(1)
     static var scrollInterval = CGFloat(0.015)
@@ -27,12 +27,12 @@ enum Preferences {
     static var deviceBezelInsetBottom = CGFloat(100)
     static var simulatorPath: String = "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/"
     static var simulatorCheckFrequency: TimeInterval = 10
+    static var menuMaximumHeight = CGFloat(650)
+    static var menuWidth = CGFloat(200)
 }
 
 extension ViewModel {
     func resetPreferences() {
-        redrawPreferences.send()
-        
         enabled = Preferences.enabled
         naturalScrolling = Preferences.naturalScrolling
         pointerColor = Preferences.pointerColor
@@ -51,5 +51,9 @@ extension ViewModel {
         deviceBezelInsetBottom = Preferences.deviceBezelInsetBottom
         simulatorPath = Preferences.simulatorPath
         simulatorCheckFrequency = Preferences.simulatorCheckFrequency
+        menuMaximumHeight = Preferences.menuMaximumHeight
+        menuWidth = Preferences.menuWidth
+
+        redrawPreferences.send()
     }
 }

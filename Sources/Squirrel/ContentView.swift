@@ -13,8 +13,37 @@ struct ContentView: View {
     @ObservedObject var viewModel: ViewModel
     @State var color = NSColor(hex: 0x007EEF).color
     @State var showingAdvanced = false
+    @State var contentHeight = Preferences.menuMaximumHeight
 
     var body: some View {
+        let height: CGFloat = {
+            if contentHeight < viewModel.menuMaximumHeight {
+                return contentHeight
+            } else {
+                return viewModel.menuMaximumHeight
+            }
+        }()
+
+        ScrollView {
+            content
+                .padding(12)
+                .readSize { size in
+                    contentHeight = size.height
+                }
+        }
+        .frame(width: viewModel.menuWidth, height: height, alignment: .topLeading)
+        .onAppear {
+            color = NSColor(hex: viewModel.pointerColor).color
+        }
+        .onChange(of: color) { newValue in
+            viewModel.pointerColor = NSColor(newValue).hex
+        }
+        .onReceive(viewModel.redrawPreferences) { _ in
+            color = NSColor(hex: viewModel.pointerColor).color
+        }
+    }
+
+    var content: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Squirrel")
@@ -144,17 +173,6 @@ struct ContentView: View {
                     .padding(.top, 20)
                 }
             }
-        }
-        .frame(width: 200, alignment: .topLeading)
-        .padding(12)
-        .onAppear {
-            color = NSColor(hex: viewModel.pointerColor).color
-        }
-        .onChange(of: color) { newValue in
-            viewModel.pointerColor = NSColor(newValue).hex
-        }
-        .onReceive(viewModel.redrawPreferences) { _ in
-            color = NSColor(hex: viewModel.pointerColor).color
         }
     }
 }
