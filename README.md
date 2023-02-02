@@ -1,6 +1,7 @@
 <img src="Assets/Logo.png" width="120" alt="Logo">
 
 # Squirrel
+
 🐿️ *Pronounced: Scroll-Wheel*
 
 A menu bar app that adds scrolling to the simulator.
@@ -10,6 +11,7 @@ A menu bar app that adds scrolling to the simulator.
 - Features: customizable settings, made with SwiftUI, and a cute squirrel.
 
 ## Installation
+
 You can download Squirrel [directly](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip), or use Homebrew.
 
 ```bash
@@ -122,7 +124,7 @@ Please add native scroll support to the Simulator! Feels like such a small featu
 
 ## License
 
-```
+```text
 MIT License
 
 Copyright (c) 2023 A. Zheng
