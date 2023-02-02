@@ -31,7 +31,7 @@ Advanced Settings
 <td>
 <img src="Assets/MenuBar.png" alt="Menu Bar">
 </td>
-<td rowspan=3>
+<td rowspan=5>
 <img src="Assets/MenuBar-Expanded.png" alt="Menu Bar">
 </td>
 </tr>
