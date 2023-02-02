@@ -30,9 +30,9 @@ class ViewModel: NSObject, ObservableObject {
     let scrollInactivityTimeout = CGFloat(1)
     let scrollCancelDistanceVertical = CGFloat(16)
     let scrollCancelDistanceHorizontal = CGFloat(8)
-    let scrollFrequency = CGFloat(0.015)
-    let pointerLength = CGFloat(20)
+    let pointerLength = CGFloat(50)
 
+    var scrollFrequency = CGFloat(0.015)
     var timer: Timer?
     @Published var scrollInteraction: ScrollInteraction?
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()

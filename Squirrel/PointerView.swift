@@ -14,15 +14,20 @@ struct PointerView: View {
 
     var body: some View {
         Circle()
-            .fill(Color.purple)
-            .frame(width: viewModel.pointerLength, height: viewModel.pointerLength)
-            .opacity(0.75)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        .teal,
+                        .green
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .frame(width: 20, height: 20)
             .opacity((viewModel.scrollInteraction != nil) ? 1 : 0)
-            .animation(.linear(duration: 0.5), value: viewModel.scrollInteraction != nil)
-//            .onAppear {
-//                withAnimation(.linear(duration: 0.5).repeatForever()) {
-//                    visible.toggle()
-//                }
-//            }
+            .frame(width: viewModel.pointerLength, height: viewModel.pointerLength)
+            .scaleEffect((viewModel.scrollInteraction != nil) ? 1 : 1.4)
+            .animation(.spring(response: 0.2, dampingFraction: 1, blendDuration: 1), value: viewModel.scrollInteraction != nil)
     }
 }

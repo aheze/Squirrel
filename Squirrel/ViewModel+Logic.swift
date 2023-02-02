@@ -96,11 +96,15 @@ extension ViewModel {
         }()
 
         guard shouldContinue else {
-            if let scrollInteraction {
+            if scrollInteraction != nil {
                 /// Stop further momentum scroll events from triggering.
                 allowMomentumScroll = false
 
-                CGWarpMouseCursorPosition(scrollInteraction.initialPoint)
+                timer?.invalidate()
+                timer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.fireTimer()
+                }
             }
 
             return
@@ -136,21 +140,25 @@ extension ViewModel {
 
             timer = Timer.scheduledTimer(withTimeInterval: scrollFrequency, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
-                guard let scrollInteraction = self.scrollInteraction else { return }
-                guard !scrollInteraction.isComplete else {
-                    self.stopScroll()
-                    return
-                }
-
-                let targetPoint = CGPoint(
-                    x: scrollInteraction.initialPoint.x,
-                    y: scrollInteraction.initialPoint.y + scrollInteraction.deltaCompleted + scrollInteraction.deltaPerStep
-                )
-                let mouseDrag = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: targetPoint, mouseButton: .left)
-                mouseDrag?.post(tap: .cghidEventTap)
-
-                self.scrollInteraction?.deltaCompleted += scrollInteraction.deltaPerStep
+                self.fireTimer()
             }
         }
+    }
+
+    func fireTimer() {
+        guard let scrollInteraction = scrollInteraction else { return }
+        guard !scrollInteraction.isComplete else {
+            stopScroll()
+            return
+        }
+
+        let targetPoint = CGPoint(
+            x: scrollInteraction.initialPoint.x,
+            y: scrollInteraction.initialPoint.y + scrollInteraction.deltaCompleted + scrollInteraction.deltaPerStep
+        )
+        let mouseDrag = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: targetPoint, mouseButton: .left)
+        mouseDrag?.post(tap: .cghidEventTap)
+
+        self.scrollInteraction?.deltaCompleted += scrollInteraction.deltaPerStep
     }
 }
