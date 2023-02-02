@@ -36,7 +36,7 @@ extension NSColor {
         return String(hex, radix: 16, uppercase: true)
     }
 
-    /// from https://stackoverflow.com/a/28645384/14351818
+    /// From https://stackoverflow.com/a/28645384/14351818
     func getHex() -> Int? {
         var fRed: CGFloat = 0
         var fGreen: CGFloat = 0
@@ -44,7 +44,7 @@ extension NSColor {
         var fAlpha: CGFloat = 0
 
         getRed(&fRed, green: &fGreen, blue: &fBlue, alpha: &fAlpha)
-        /// could be negative
+        /// Could be negative, so clamp to prevent crashing.
         fRed = fRed.clamped(to: 0 ... 1)
         fGreen = fGreen.clamped(to: 0 ... 1)
         fBlue = fBlue.clamped(to: 0 ... 1)
@@ -53,17 +53,17 @@ extension NSColor {
         let iGreen = UInt(fGreen * 255.0)
         let iBlue = UInt(fBlue * 255.0)
 
-        //  (Bits 24-31 are alpha, 16-23 are red, 8-15 are green, 0-7 are blue).
+        ///  (Bits 24-31 are alpha, 16-23 are red, 8-15 are green, 0-7 are blue).
         let hex = (iRed << 16) + (iGreen << 8) + iBlue
         return Int(hex)
     }
 
-    /// get a gradient color
+    /// Get a gradient color.
     func offset(by offset: CGFloat) -> NSColor {
         let (h, s, b, a) = hsba
         var newHue = h - offset
 
-        /// make it go back to positive
+        /// Make it go back to positive.
         while newHue <= 0 {
             newHue += 1
         }
@@ -73,22 +73,24 @@ extension NSColor {
 }
 
 extension NSColor {
+    /// Return a SwiftUI color from a NSColor.
     var color: Color {
         return Color(self)
     }
 }
 
 extension Comparable {
-    /// used for the UIColor
+    /// Used for the `NSColor.getHex` function.
     func clamped(to limits: ClosedRange<Self>) -> Self {
         return min(max(self, limits.lowerBound), limits.upperBound)
     }
 }
 
 public extension View {
+    /// Reverse mask for "cutting holes" in views.
     @inlinable
     func reverseMask<Mask: View>(
-        padding: CGFloat = 0, /// extra negative padding for shadows
+        padding: CGFloat = 0, /// Extra negative padding for shadows.
         @ViewBuilder _ mask: () -> Mask
     ) -> some View {
         self.mask(
@@ -103,6 +105,7 @@ public extension View {
 }
 
 extension View {
+    /// Add the background color for menu rows.
     func menuBackground() -> some View {
         padding(.horizontal, 12)
             .background(Color.black.opacity(0.06))
