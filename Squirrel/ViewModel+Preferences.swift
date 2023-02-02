@@ -14,6 +14,8 @@ enum Preferences {
     static var pointerColor = 0x007EEF
     static var pointerLength = CGFloat(20)
     static var pointerOpacity = CGFloat(0.95)
+    static var pointerScaleRatio = CGFloat(1.4)
+    
     static var numberOfScrollSteps = 10
     static var scrollInactivityTimeout = CGFloat(1)
     static var scrollInterval = CGFloat(0.015)
@@ -32,6 +34,8 @@ extension ViewModel {
         pointerColor = Preferences.pointerColor
         pointerLength = Preferences.pointerLength
         pointerOpacity = Preferences.pointerOpacity
+        pointerScaleRatio = Preferences.pointerScaleRatio
+        
         numberOfScrollSteps = Preferences.numberOfScrollSteps
         scrollInactivityTimeout = Preferences.scrollInactivityTimeout
         scrollInterval = Preferences.scrollInterval

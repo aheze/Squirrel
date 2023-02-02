@@ -38,8 +38,6 @@ extension ViewModel {
         /// Topmost window is first in this array.
         let visibleWindowInformation = infoList.filter { $0["kCGWindowLayer"] as! Int == 0 }
 
-//        print("visibleWindows: \(visibleWindowInformation.map { $0["kCGWindowOwnerName"] })")
-//        print("visibleWindows: \(visibleWindows)")
         return visibleWindowInformation
     }
 

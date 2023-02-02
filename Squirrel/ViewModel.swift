@@ -18,6 +18,7 @@ class ViewModel: NSObject, ObservableObject {
     @AppStorage("pointerColor") var pointerColor = Preferences.pointerColor
     @AppStorage("pointerLength") var pointerLength = Preferences.pointerLength
     @AppStorage("pointerOpacity") var pointerOpacity = Preferences.pointerOpacity
+    @AppStorage("pointerScaleRatio") var pointerScaleRatio = Preferences.pointerScaleRatio
 
     // MARK: - Status Bar Properties
 
@@ -36,7 +37,7 @@ class ViewModel: NSObject, ObservableObject {
     @AppStorage("deviceBezelInsetRight") var deviceBezelInsetRight = Preferences.deviceBezelInsetRight
     @AppStorage("deviceBezelInsetBottom") var deviceBezelInsetBottom = Preferences.deviceBezelInsetBottom
     var pointerWindowLength: CGFloat {
-        pointerLength * 2
+        pointerLength * 5
     }
 
     var timer: Timer?

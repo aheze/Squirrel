@@ -45,6 +45,7 @@ struct ContentView: View {
 
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Size", value: $viewModel.pointerLength)
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Opacity", value: $viewModel.pointerOpacity)
+                DoubleFieldRow(viewModel: viewModel, title: "Pointer Scale", value: $viewModel.pointerScaleRatio)
             }
 
             VStack(alignment: .leading, spacing: 4.5) {

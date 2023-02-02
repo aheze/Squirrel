@@ -29,7 +29,7 @@ struct PointerView: View {
         }
         .frame(width: viewModel.pointerLength, height: viewModel.pointerLength)
         .frame(width: viewModel.pointerWindowLength, height: viewModel.pointerWindowLength)
-        .scaleEffect((viewModel.scrollInteraction != nil) ? 1 : 1.4)
-        .animation(.spring(response: 0.2, dampingFraction: 1, blendDuration: 1), value: viewModel.scrollInteraction != nil)
+        .scaleEffect((viewModel.scrollInteraction != nil) ? 1 : viewModel.pointerScaleRatio)
+        .animation(.spring(response: 0.25, dampingFraction: 1, blendDuration: 1), value: viewModel.scrollInteraction != nil)
     }
 }
