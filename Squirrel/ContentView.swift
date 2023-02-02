@@ -29,8 +29,7 @@ struct ContentView: View {
                 }
             }
 
-//            viewModel.permissionsGranted
-            if true {
+            if !viewModel.permissionsGranted {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Accessibility Permissions Needed")
                         .foregroundColor(.white)
@@ -108,12 +107,25 @@ struct ContentView: View {
 
                             Image(systemName: "arrow.counterclockwise")
                         }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .font(.footnote.bold())
                         .foregroundColor(NSColor.secondaryLabelColor.color)
+                        .font(.footnote.bold())
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .buttonStyle(.plain)
                     .padding(.top, 4)
+
+                    VStack {
+                        Image("Squirrel")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 160, height: 160)
+
+                        Text("Squirrel made by [aheze](https://twitter.com/aheze0)")
+                            .foregroundColor(NSColor.secondaryLabelColor.color)
+                            .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 20)
                 }
             }
         }
