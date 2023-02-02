@@ -10,6 +10,7 @@ import Carbon.HIToolbox
 import Cocoa
 
 extension ViewModel {
+    /// Listen to the `ESC` key (acts as an emergency stop in case Squirrel bugs out).
     func processKey(event: NSEvent) {
         switch Int(event.keyCode) {
             case kVK_Escape:
@@ -22,6 +23,7 @@ extension ViewModel {
         }
     }
 
+    /// Stop the current scroll interaction.
     func stopScroll() {
         timer?.invalidate()
         timer = nil
@@ -41,13 +43,14 @@ extension ViewModel {
         }
     }
 
+    /// Process a mouse scroll event.
     func processScroll(event: NSEvent) {
         guard enabled else {
             stopScroll()
             return
         }
 
-        /// `NSEvent.mouseLocation` seems to be more accurate than `event.locationInWindow`
+        /// `NSEvent.mouseLocation` seems to be more accurate than `event.locationInWindow`.
         let point = convertPointToScreen(point: NSEvent.mouseLocation)
         let (simulatorFrames, ignoredFrames) = getSimulatorWindowFrames()
 
@@ -56,18 +59,20 @@ extension ViewModel {
             return
         }
 
-        if !allowMomentumScroll {
-            if event.momentumPhase == .changed {
-                return
-            }
+        /// Ignore if momentum scroll is not allowed.
+        if !allowMomentumScroll, event.momentumPhase == .changed {
+            return
         }
 
+        /// However, if the scroll wheel came to a stop, enable momentum scroll later on.
         if event.momentumPhase == .ended {
             allowMomentumScroll = true
         }
 
+        /// Keep scrolling active.
         scrollEventActivityCounter.send()
 
+        /// Determine if the cursor is within the bounds of the simulator.
         let shouldContinue: Bool = {
             let intersectingFrame = simulatorFrames.first(where: { $0.contains(point) })
 
@@ -100,11 +105,13 @@ extension ViewModel {
             }
         }()
 
+        /// If the cursor went outside the allowed bounds, stop scrolling.
         guard shouldContinue else {
             if scrollInteraction != nil {
                 /// Stop further momentum scroll events from triggering.
                 allowMomentumScroll = false
 
+                /// Quickly scroll to the target value.
                 timer?.invalidate()
                 timer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { [weak self] _ in
                     guard let self = self else { return }
@@ -115,6 +122,7 @@ extension ViewModel {
             return
         }
 
+        /// Get how much to drag the screen by.
         let delta: CGFloat = {
             if naturalScrolling {
                 return event.scrollingDeltaY
@@ -123,6 +131,7 @@ extension ViewModel {
             }
         }()
 
+        /// If a scroll interaction already exists, add the delta to the existing one.
         if var scrollInteraction {
             scrollInteraction.targetDelta += delta
 
@@ -132,6 +141,11 @@ extension ViewModel {
             self.scrollInteraction = scrollInteraction
 
         } else {
+            /**
+             Otherwise, create a new scroll interaction.
+
+             Setting `scrollInteraction` will show a pointer where the cursor originally is.
+             */
             let deltaPerStep = delta / CGFloat(numberOfScrollSteps)
             let scrollInteraction = ScrollInteraction(
                 initialPoint: point,
@@ -140,6 +154,7 @@ extension ViewModel {
             )
             self.scrollInteraction = scrollInteraction
 
+            /// Start by clicking down.
             let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: point, mouseButton: .left)
             mouseDown?.post(tap: .cghidEventTap)
 
@@ -150,20 +165,27 @@ extension ViewModel {
         }
     }
 
+    /// Simulate a drag effect.
     func fireTimer() {
         guard let scrollInteraction = scrollInteraction else { return }
-        guard !scrollInteraction.isComplete else {
+        guard !scrollInteraction.deltaCompletedHasReachedTarget else {
+            /// If the scroll interaction has reached the target delta, stop scrolling.
             stopScroll()
             return
         }
 
         let targetPoint = CGPoint(
             x: scrollInteraction.initialPoint.x,
+
+            /// Drag by `deltaPerStep` each time this method is called.
             y: scrollInteraction.initialPoint.y + scrollInteraction.deltaCompleted + scrollInteraction.deltaPerStep
         )
+
         let mouseDrag = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: targetPoint, mouseButton: .left)
         mouseDrag?.post(tap: .cghidEventTap)
 
+        
+        /// Add on the delta to the state.
         self.scrollInteraction?.deltaCompleted += scrollInteraction.deltaPerStep
     }
 }

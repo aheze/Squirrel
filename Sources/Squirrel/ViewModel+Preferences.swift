@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// Stores the default preferences..
 enum Preferences {
     static var enabled = true
     static var naturalScrolling = true

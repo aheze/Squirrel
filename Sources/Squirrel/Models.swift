@@ -14,7 +14,7 @@ struct ScrollInteraction {
     var deltaPerStep: CGFloat
     var deltaCompleted = CGFloat(0)
 
-    var isComplete: Bool {
+    var deltaCompletedHasReachedTarget: Bool {
         /// if both 0, return false
         guard !(deltaCompleted == 0 && targetDelta == 0) else { return false }
 

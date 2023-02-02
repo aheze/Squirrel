@@ -11,35 +11,31 @@ import Cocoa
 // MARK: - Utilities
 
 extension ViewModel {
-    func openAccessibilityPreferences() {
-        let macOSVersion = ProcessInfo.processInfo.operatingSystemVersion.minorVersion
-
-        let script = macOSVersion < 9
-            ? "tell application \"System Preferences\" \n set the current pane to pane id \"com.apple.preference.universalaccess\" \n activate \n end tell"
-            : "tell application \"System Preferences\" \n reveal anchor \"Privacy_Accessibility\" of pane id \"com.apple.preference.security\" \n activate \n end tell"
-
-        NSAppleScript(source: script)?.executeAndReturnError(nil)
-    }
-
+    /// Get the cursor location from a `NSEvent.`
     func getPoint(event: NSEvent) -> CGPoint {
         let point = convertPointToScreen(point: event.locationInWindow)
         return point
     }
 
+    /// Flip a point's y value to have the origin (0,0) at the top-left.
     func convertPointToScreen(point: CGPoint) -> CGPoint {
         guard let screen = getScreenWithMouse() else { return .zero }
         let point = CGPoint(x: point.x, y: screen.frame.height - point.y)
         return point
     }
 
+    /// Get the screen that contains the mouse.
     func getScreenWithMouse() -> NSScreen? {
         let mouseLocation = NSEvent.mouseLocation
         let screens = NSScreen.screens
+
+        /// Sometimes `NSMouseInRect` doesn't work, so default to the first screen (`screens.first`).
         let screenWithMouse = screens.first { NSMouseInRect(mouseLocation, $0.frame, false) } ?? screens.first
 
         return screenWithMouse
     }
 
+    /// Get information (name, frame, and other info) of visible windows.
     func getWindowInformation() -> [[String: Any]] {
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
@@ -51,6 +47,7 @@ extension ViewModel {
         return visibleWindowInformation
     }
 
+    /// Get the names and frames of windows.
     func getWindows() -> [(name: String, frame: CGRect)] {
         let windowInformation = getWindowInformation()
         let windows: [(String, CGRect)] = windowInformation.compactMap { window in
@@ -73,7 +70,9 @@ extension ViewModel {
     }
 
     /**
-     - parameter frames: The simulator window frames, inset by the specified bezel insets.
+     Get frames of the simulator.
+
+     - parameter simulatorFrames: The simulator window frames, inset by the specified bezel insets.
      - parameter ignoredFrames: Portions of overlapping windows. Ignore scrolling if the mouse is within these frames.
      */
     func getSimulatorWindowFrames() -> (simulatorFrames: [CGRect], ignoredFrames: [CGRect]) {
@@ -107,9 +106,3 @@ extension ViewModel {
         return (simulatorFrames, ignoredFrames)
     }
 }
-
-//
-// frame.origin.x += deviceBezelInsetLeft
-// frame.origin.y += deviceBezelInsetTop
-// frame.size.width -= deviceBezelInsetLeft + deviceBezelInsetRight
-// frame.size.height -= deviceBezelInsetTop + deviceBezelInsetBottom
