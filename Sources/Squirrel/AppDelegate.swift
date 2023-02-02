@@ -10,7 +10,9 @@ import Cocoa
 import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    /// Instantiate the main view model.
     let viewModel = ViewModel()
+
     let popover = NSPopover()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
