@@ -11,7 +11,13 @@ extension AppDelegate {
     func openSimulator() -> Bool {
         guard !isSimulatorOpen() && viewModel.launchSimulatorOnStartup else { return true }
         let url = URL(fileURLWithPath: viewModel.simulatorPath)
-        return NSWorkspace.shared.open(url)
+        if NSWorkspace.shared.open(url) {
+            return true
+        }
+        // if it failed to open the simulator, don't quit if simulator is closed
+        // as it will result in the app quitting right after startup
+        viewModel.quitIfSimulatorClosed = false
+        return false
     }
 
     func checkIfSimulatorIsOpen() {
