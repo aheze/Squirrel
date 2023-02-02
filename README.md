@@ -32,7 +32,7 @@ Advanced Settings
 <img src="Assets/MenuBar.png" alt="Menu Bar">
 </td>
 <td rowspan=5>
-<img src="Assets/MenuBar-Expanded.png" alt="Menu Bar">
+<img src="Assets/MenuBar-Expanded.png" alt="Menu Bar Expanded">
 </td>
 </tr>
 
@@ -51,10 +51,40 @@ Dark Mode
   
 <tr>
 <td>
-<img src="Assets/MenuBar-Dark.png" alt="Menu Bar">
+<img src="Assets/MenuBar-Dark.png" alt="Menu Bar Dark Mode">
 </td>
 </tr>
  
+</table>
+
+<table>
+<tr>
+<td>
+1. You start scrolling
+</td>
+<td>
+2. Squirrel drags on the screen for you
+</td>
+<td>
+3. Your cursor auto-snaps back to where you started
+</td>
+</tr>
+  
+  
+<tr>
+</tr>  
+  
+<tr>
+<td>
+<img src="Assets/Simulator1.png" alt="Screenshot of simulator">
+</td>
+<td>
+<img src="Assets/Simulator2.png" alt="Screenshot of simulator, blue pointer shown at initial cursor position. Cursor is dragged higher up.">
+</td>
+<td>
+<img src="Assets/Simulator3.png" alt="Screenshot of simulator, cursor is back at its original position.">
+</td>
+</tr>
 </table>
 
 ## Community
