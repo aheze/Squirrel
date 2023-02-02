@@ -11,6 +11,16 @@ import Cocoa
 // MARK: - Utilities
 
 extension ViewModel {
+    func openAccessibilityPreferences() {
+        let macOSVersion = ProcessInfo.processInfo.operatingSystemVersion.minorVersion
+
+        let script = macOSVersion < 9
+            ? "tell application \"System Preferences\" \n set the current pane to pane id \"com.apple.preference.universalaccess\" \n activate \n end tell"
+            : "tell application \"System Preferences\" \n reveal anchor \"Privacy_Accessibility\" of pane id \"com.apple.preference.security\" \n activate \n end tell"
+
+        NSAppleScript(source: script)?.executeAndReturnError(nil)
+    }
+
     func getPoint(event: NSEvent) -> CGPoint {
         let point = convertPointToScreen(point: event.locationInWindow)
         return point

@@ -40,6 +40,9 @@ class ViewModel: NSObject, ObservableObject {
         pointerLength * 5
     }
 
+    // MARK: - General Properties
+
+    @Published var permissionsGranted = false
     var timer: Timer?
     @Published var scrollInteraction: ScrollInteraction?
     var scrollEventActivityCounter = PassthroughSubject<Void, Never>()
@@ -47,6 +50,7 @@ class ViewModel: NSObject, ObservableObject {
     var allowMomentumScroll = true
 
     var cancellables = Set<AnyCancellable>()
+    var permissionsCancellable: AnyCancellable?
     var redrawPreferences = PassthroughSubject<Void, Never>()
 
     override init() {
@@ -63,7 +67,35 @@ class ViewModel: NSObject, ObservableObject {
             statusBarButton.target = self
         }
 
+        loadPermissions()
+
+        permissionsCancellable = $permissionsGranted.sink { [weak self] permissionsGranted in
+            guard let self = self else { return }
+            guard permissionsGranted else { return }
+
+            if permissionsGranted {
+                self.start()
+                self.permissionsCancellable = nil
+            }
+        }
+
         start()
+    }
+
+    // MARK: - Permissions
+
+    func loadPermissions() {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: false]
+        let granted = AXIsProcessTrustedWithOptions(options)
+        permissionsGranted = granted
+
+        if !granted {
+            DistributedNotificationCenter.default().addObserver(forName: NSNotification.Name("com.apple.accessibility.api"), object: nil, queue: nil) { _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.loadPermissions()
+                }
+            }
+        }
     }
 
     // MARK: - Start Listening To Cursor Events

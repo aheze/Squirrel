@@ -29,6 +29,32 @@ struct ContentView: View {
                 }
             }
 
+//            viewModel.permissionsGranted
+            if true {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Accessibility Permissions Needed")
+                        .foregroundColor(.white)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(12)
+                        .background(Color.blue.brightness(-0.2))
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        StepView(number: "1", title: "Settings")
+                        StepView(number: "2", title: "Privacy & Security")
+                        StepView(number: "3", title: "Accessibility")
+                    }
+                    .foregroundColor(.blue)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
+                    .background(Color.blue.opacity(0.08))
+                }
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .cornerRadius(6)
+            }
+
             VStack(alignment: .leading, spacing: 4.5) {
                 MenuToggleRow(title: "Enabled", isOn: $viewModel.enabled)
                 MenuToggleRow(title: "Natural Scrolling", isOn: $viewModel.naturalScrolling)
@@ -242,5 +268,26 @@ struct SocialButton: View {
         }
         .buttonStyle(.plain)
         .frame(width: 19, height: 19)
+    }
+}
+
+struct StepView: View {
+    var number: String
+    var title: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(number)
+                .fontDesign(.rounded)
+                .frame(width: 24, height: 24)
+                .background {
+                    Circle()
+                        .fill(.blue)
+                        .brightness(-0.2)
+                        .opacity(0.08)
+                }
+
+            Text(title)
+        }
     }
 }
