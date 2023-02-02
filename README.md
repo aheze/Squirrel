@@ -10,6 +10,53 @@ A menu bar app that adds scrolling to the simulator.
 - Features: customizable settings, made with SwiftUI, and a cute squirrel.
 - [Download](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip) here.
 
+
+## Screenshots
+
+<table>
+
+<tr>
+<td>
+Main Menu
+</td>
+<td>
+Advanced Settings
+</td>
+</tr>
+
+<tr>
+</tr>
+  
+<tr>
+<td>
+<img src="Assets/MenuBar.png" alt="Menu Bar">
+</td>
+<td rowspan=3>
+<img src="Assets/MenuBar-Expanded.png" alt="Menu Bar">
+</td>
+</tr>
+
+<tr>
+</tr>
+  
+<tr>
+<td>
+Dark Mode
+</td>
+</tr>
+  
+<tr>
+</tr>
+
+  
+<tr>
+<td>
+<img src="Assets/MenuBar-Dark.png" alt="Menu Bar">
+</td>
+</tr>
+ 
+</table>
+
 ## Community
 
 Author | Contributing | Need Help?
