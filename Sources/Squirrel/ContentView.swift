@@ -123,20 +123,32 @@ struct ContentView: View {
             }
 
             VStack(alignment: .leading, spacing: 4.5) {
-                Button {
-                    showingAdvanced.toggle()
-                } label: {
-                    HStack(spacing: 6) {
-                        Text("Advanced")
-
-                        Image(systemName: "chevron.right")
-                            .rotationEffect(.degrees(showingAdvanced ? 90 : 0))
+                HStack {
+                    Button {
+                        viewModel.quitApplication()
+                    } label: {
+                        Text("Quit")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.footnote.bold())
+                            .foregroundColor(NSColor.secondaryLabelColor.color)
                     }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .font(.footnote.bold())
-                    .foregroundColor(NSColor.secondaryLabelColor.color)
+                    .buttonStyle(.plain)
+                    
+                    Button {
+                        showingAdvanced.toggle()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Text("Advanced")
+                            
+                            Image(systemName: "chevron.right")
+                                .rotationEffect(.degrees(showingAdvanced ? 90 : 0))
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .font(.footnote.bold())
+                        .foregroundColor(NSColor.secondaryLabelColor.color)
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
 
                 if showingAdvanced {
                     Group {
