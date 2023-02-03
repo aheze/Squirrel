@@ -25,6 +25,12 @@ struct ContentView: View {
     /// The total height of the main content inside the menu.
     @State var contentHeight = Preferences.menuMaximumHeight
 
+    /// Animation flag for the app icon wheel.
+    @State var animatingSpin = false
+
+    /// Extra angle added when the app icon is tapped.
+    @State var animatingSpinExtraAngle = CGFloat(0)
+
     var body: some View {
         /// Prevent the content from surpassing `menuMaximumHeight`.
         let height: CGFloat = {
@@ -201,10 +207,25 @@ struct ContentView: View {
 
                 if showingAbout {
                     VStack {
-                        Image("Squirrel")
+                        Image("AppIcon-Base")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 160, height: 160)
+                            .overlay {
+                                Image("AppIcon-Wheel")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .shadow(color: .black.opacity(0.75), radius: 6, x: 0, y: 0)
+                                    .frame(width: 62, height: 62)
+                                    .rotationEffect(.degrees(animatingSpin ? 360 : 0))
+                                    .rotationEffect(.degrees(animatingSpinExtraAngle))
+                                    .offset(y: 3)
+                            }
+                            .onTapGesture {
+                                withAnimation(.spring(response: 1.2, dampingFraction: 1, blendDuration: 1)) {
+                                    animatingSpinExtraAngle += 90
+                                }
+                            }
 
                         Text("Squirrel made by [aheze](https://twitter.com/aheze0)")
                             .foregroundColor(NSColor.secondaryLabelColor.color)
@@ -213,6 +234,11 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, 16)
                     .padding(.bottom, 20)
+                    .onAppear {
+                        withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+                            animatingSpin = true
+                        }
+                    }
                 }
             }
         }
