@@ -19,6 +19,9 @@ struct ContentView: View {
     /// Keeps track of whether the advanced section is shown.
     @State var showingAdvanced = false
 
+    /// Keeps track of whether the "about" section is shown.
+    @State var showingAbout = false
+
     /// The total height of the main content inside the menu.
     @State var contentHeight = Preferences.menuMaximumHeight
 
@@ -114,20 +117,36 @@ struct ContentView: View {
             }
 
             VStack(alignment: .leading, spacing: 4.5) {
-                Button {
-                    showingAdvanced.toggle()
-                } label: {
-                    HStack(spacing: 6) {
-                        Text("Advanced")
+                HStack(spacing: 16) {
+                    Button {
+                        showingAbout.toggle()
+                    } label: {
+                        HStack(spacing: 3) {
+                            Text("About")
 
-                        Image(systemName: "chevron.right")
-                            .rotationEffect(.degrees(showingAdvanced ? 90 : 0))
+                            Image(systemName: "chevron.right")
+                                .rotationEffect(.degrees(showingAbout ? 90 : 0))
+                        }
+                        .font(.footnote.bold())
+                        .foregroundColor(NSColor.secondaryLabelColor.color)
                     }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .font(.footnote.bold())
-                    .foregroundColor(NSColor.secondaryLabelColor.color)
+                    .buttonStyle(.plain)
+
+                    Button {
+                        showingAdvanced.toggle()
+                    } label: {
+                        HStack(spacing: 3) {
+                            Text("Advanced")
+
+                            Image(systemName: "chevron.right")
+                                .rotationEffect(.degrees(showingAdvanced ? 90 : 0))
+                        }
+                        .font(.footnote.bold())
+                        .foregroundColor(NSColor.secondaryLabelColor.color)
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, alignment: .trailing)
 
                 if showingAdvanced {
                     Group {
@@ -178,7 +197,9 @@ struct ContentView: View {
                     }
                     .buttonStyle(.plain)
                     .padding(.top, 4)
+                }
 
+                if showingAbout {
                     VStack {
                         Image("Squirrel")
                             .resizable()
@@ -190,7 +211,8 @@ struct ContentView: View {
                             .fontWeight(.semibold)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 20)
+                    .padding(.top, 16)
+                    .padding(.bottom, 20)
                 }
             }
         }
