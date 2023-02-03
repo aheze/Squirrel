@@ -42,7 +42,7 @@ struct StepView: View {
     var body: some View {
         HStack(spacing: 8) {
             Text(number)
-                .fontDesign(.rounded)
+                .fontWeight(.medium)
                 .frame(width: 24, height: 24)
                 .background {
                     Circle()
