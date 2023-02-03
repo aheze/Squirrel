@@ -19,7 +19,7 @@ brew tap hkamran80/things
 brew install hkamran80/things/squirrel
 ```
 
-**Note:** Squirrel requires macOS Ventura (13.0) or higher.
+**Note:** Squirrel requires macOS Ventura (13.0) or higher. Big Sur support coming soon.
 
 ## Screenshots
 
@@ -99,13 +99,14 @@ Dark Mode
 
 ## Videos
 
-
 https://user-images.githubusercontent.com/49819455/216271894-3e2352a4-edd0-41b7-a830-1cc4fb9aa15e.mp4
-
-
 
 https://user-images.githubusercontent.com/49819455/216271984-b6672a5f-72ad-40bd-b01b-dad7059d92ae.mp4
 
+## Notes
+
+- Press <kbd>ESC</kbd> to stop scrolling, in case something bugs out.
+- Trackpad support is currently unstable. Most scroll wheels should work.
 
 
 ## Community
