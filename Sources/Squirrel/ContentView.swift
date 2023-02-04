@@ -108,8 +108,8 @@ struct ContentView: View {
                             .fontWeight(.medium)
                     }
                     .padding(12)
-                    .background(Color.blue.brightness(-0.2))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.blue.brightness(-0.2))
 
                     VStack(alignment: .leading, spacing: 8) {
                         StepView(number: "1", title: "Settings")
