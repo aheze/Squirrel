@@ -121,7 +121,7 @@ struct DoubleField: View {
             .multilineTextAlignment(.trailing)
             .fixedSize(horizontal: true, vertical: false)
             .focused($focused)
-            .focusable(false)
+            .focusable(false) /// Weird hack to stop it from focusing at first.
             .onSubmit {
                 let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
                 if let double = Double(text) {

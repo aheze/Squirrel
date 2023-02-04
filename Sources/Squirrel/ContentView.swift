@@ -19,8 +19,17 @@ struct ContentView: View {
     /// Keeps track of whether the advanced section is shown.
     @State var showingAdvanced = false
 
+    /// Keeps track of whether the "about" section is shown.
+    @State var showingAbout = false
+
     /// The total height of the main content inside the menu.
     @State var contentHeight = Preferences.menuMaximumHeight
+
+    /// Animation flag for the app icon wheel.
+    @State var animatingSpin = false
+
+    /// Extra angle added when the app icon is tapped.
+    @State var animatingSpinExtraAngle = CGFloat(0)
 
     var body: some View {
         /// Prevent the content from surpassing `menuMaximumHeight`.
@@ -82,6 +91,7 @@ struct ContentView: View {
                         StepView(number: "1", title: "Settings")
                         StepView(number: "2", title: "Privacy & Security")
                         StepView(number: "3", title: "Accessibility")
+                        StepView(number: "4", title: "Turn on for Squirrel")
                     }
                     .foregroundColor(.blue)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -110,47 +120,55 @@ struct ContentView: View {
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Size", value: $viewModel.pointerLength)
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Opacity", value: $viewModel.pointerOpacity)
                 DoubleFieldRow(viewModel: viewModel, title: "Pointer Scale", value: $viewModel.pointerScaleRatio)
-                MenuToggleRow(title: "Launch Simulator On Startup", isOn: .init(get: {
-                    viewModel.launchSimulatorOnStartup
-                }, set: { newValue in
-                    viewModel.launchSimulatorOnStartup = newValue
-                    if newValue == false {
-                        viewModel.quitIfSimulatorClosed = false
-                    }
-                }))
-                MenuToggleRow(title: "Quit If Simulator Is Closed", isOn: $viewModel.quitIfSimulatorClosed)
-                    .disabled(viewModel.launchSimulatorOnStartup == false)
             }
 
             VStack(alignment: .leading, spacing: 4.5) {
-                HStack {
+                HStack(spacing: 16) {
                     Button {
-                        viewModel.quitApplication()
+                        showingAbout.toggle()
                     } label: {
-                        Text("Quit")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(.footnote.bold())
-                            .foregroundColor(NSColor.secondaryLabelColor.color)
+                        HStack(spacing: 3) {
+                            Text("About")
+
+                            Image(systemName: "chevron.right")
+                                .rotationEffect(.degrees(showingAbout ? 90 : 0))
+                        }
+                        .font(.footnote.bold())
+                        .foregroundColor(NSColor.secondaryLabelColor.color)
                     }
                     .buttonStyle(.plain)
-                    
+
                     Button {
                         showingAdvanced.toggle()
                     } label: {
-                        HStack(spacing: 6) {
+                        HStack(spacing: 3) {
                             Text("Advanced")
-                            
+
                             Image(systemName: "chevron.right")
                                 .rotationEffect(.degrees(showingAdvanced ? 90 : 0))
                         }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
                         .font(.footnote.bold())
                         .foregroundColor(NSColor.secondaryLabelColor.color)
                     }
                     .buttonStyle(.plain)
                 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
 
                 if showingAdvanced {
+                    Group {
+                        MenuToggleRow(title: "Launch Simulator On Startup", isOn: Binding {
+                            viewModel.launchSimulatorOnStartup
+                        } set: { newValue in
+                            viewModel.launchSimulatorOnStartup = newValue
+                            if newValue == false {
+                                viewModel.quitIfSimulatorClosed = false
+                            }
+                        })
+
+                        MenuToggleRow(title: "Quit If Simulator Is Closed", isOn: $viewModel.quitIfSimulatorClosed)
+                            .disabled(viewModel.launchSimulatorOnStartup == false)
+                    }
+
                     Group {
                         IntFieldRow(viewModel: viewModel, title: "Scroll Steps", value: $viewModel.numberOfScrollSteps)
                         DoubleFieldRow(viewModel: viewModel, title: "Inactivity Timeout", value: $viewModel.scrollInactivityTimeout)
@@ -185,19 +203,47 @@ struct ContentView: View {
                     }
                     .buttonStyle(.plain)
                     .padding(.top, 4)
+                }
 
+                if showingAbout {
                     VStack {
-                        Image("Squirrel")
+                        Image("AppIcon-Base")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 160, height: 160)
+                            .overlay {
+                                Image("AppIcon-Wheel")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .shadow(color: .black.opacity(0.75), radius: 6, x: 0, y: 0)
+                                    .frame(width: 62, height: 62)
+                                    .rotationEffect(.degrees(animatingSpin ? 360 : 0))
+                                    .rotationEffect(.degrees(animatingSpinExtraAngle))
+                                    .offset(y: 3)
+                            }
+                            .onTapGesture {
+                                withAnimation(.spring(response: 1.2, dampingFraction: 1, blendDuration: 1)) {
+                                    animatingSpinExtraAngle += 90
+                                }
+                            }
 
                         Text("Squirrel made by [aheze](https://twitter.com/aheze0)")
                             .foregroundColor(NSColor.secondaryLabelColor.color)
                             .fontWeight(.semibold)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 20)
+                    .padding(.top, 16)
+                    .padding(.bottom, 20)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+                                animatingSpin = true
+                            }
+                        }
+                    }
+                    .onDisappear {
+                        animatingSpin = false
+                    }
                 }
             }
         }

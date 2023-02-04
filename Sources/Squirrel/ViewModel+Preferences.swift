@@ -16,9 +16,9 @@ enum Preferences {
     static var pointerLength = CGFloat(20)
     static var pointerOpacity = CGFloat(0.95)
     static var pointerScaleRatio = CGFloat(1.4)
-    static var launchSimulatorOnStartup: Bool = true
-    static var quitIfSimulatorClosed: Bool = true
 
+    static var launchSimulatorOnStartup: Bool = false
+    static var quitIfSimulatorClosed: Bool = true
     static var numberOfScrollSteps = 10
     static var scrollInactivityTimeout = CGFloat(1)
     static var scrollInterval = CGFloat(0.015)
@@ -40,9 +40,9 @@ extension ViewModel {
         pointerLength = Preferences.pointerLength
         pointerOpacity = Preferences.pointerOpacity
         pointerScaleRatio = Preferences.pointerScaleRatio
+
         launchSimulatorOnStartup = Preferences.launchSimulatorOnStartup
         quitIfSimulatorClosed = Preferences.quitIfSimulatorClosed
-
         numberOfScrollSteps = Preferences.numberOfScrollSteps
         scrollInactivityTimeout = Preferences.scrollInactivityTimeout
         scrollInterval = Preferences.scrollInterval
