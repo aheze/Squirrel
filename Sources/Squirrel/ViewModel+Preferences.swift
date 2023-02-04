@@ -18,7 +18,7 @@ enum Preferences {
     static var pointerScaleRatio = CGFloat(1.4)
 
     static var launchSimulatorOnStartup: Bool = false
-    static var quitIfSimulatorClosed: Bool = true
+    static var quitIfSimulatorClosed: Bool = false
     static var numberOfScrollSteps = 10
     static var scrollInactivityTimeout = CGFloat(1)
     static var scrollInterval = CGFloat(0.015)

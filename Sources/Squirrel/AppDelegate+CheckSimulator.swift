@@ -22,7 +22,7 @@ extension AppDelegate {
 
     func checkIfSimulatorIsOpen() {
         if !isSimulatorOpen() && viewModel.quitIfSimulatorClosed {
-            NSApplication.shared.terminate(self)
+            viewModel.quitApplication()
         }
 
         /// Check every ten seconds.

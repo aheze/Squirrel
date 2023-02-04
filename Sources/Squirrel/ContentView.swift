@@ -125,6 +125,17 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 4.5) {
                 HStack(spacing: 16) {
                     Button {
+                        viewModel.quitApplication()
+                    } label: {
+                        HStack(spacing: 3) {
+                            Text("Quit")
+
+                            Image(systemName: "xmark")
+                        }
+                    }
+                    .buttonStyle(.plain)
+
+                    Button {
                         showingAbout.toggle()
                     } label: {
                         HStack(spacing: 3) {
@@ -133,8 +144,6 @@ struct ContentView: View {
                             Image(systemName: "chevron.right")
                                 .rotationEffect(.degrees(showingAbout ? 90 : 0))
                         }
-                        .font(.footnote.bold())
-                        .foregroundColor(NSColor.secondaryLabelColor.color)
                     }
                     .buttonStyle(.plain)
 
@@ -147,11 +156,11 @@ struct ContentView: View {
                             Image(systemName: "chevron.right")
                                 .rotationEffect(.degrees(showingAdvanced ? 90 : 0))
                         }
-                        .font(.footnote.bold())
-                        .foregroundColor(NSColor.secondaryLabelColor.color)
                     }
                     .buttonStyle(.plain)
                 }
+                .font(.footnote.bold())
+                .foregroundColor(NSColor.secondaryLabelColor.color)
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
                 if showingAdvanced {

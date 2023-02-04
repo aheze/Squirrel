@@ -11,6 +11,12 @@ import Cocoa
 // MARK: - Utilities
 
 extension ViewModel {
+    // MARK: - Quit app manually
+
+    func quitApplication() {
+        app.terminate(nil)
+    }
+
     /// Get the cursor location from a `NSEvent.`
     func getPoint(event: NSEvent) -> CGPoint {
         let point = convertPointToScreen(point: event.locationInWindow)

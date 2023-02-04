@@ -236,10 +236,3 @@ extension ViewModel: NSPopoverDelegate {
         NSApp.activate(ignoringOtherApps: true)
     }
 }
-
-extension ViewModel {
-    // MARK: - Quit app manually
-    func quitApplication() {
-        app.terminate(nil)
-    }
-}
