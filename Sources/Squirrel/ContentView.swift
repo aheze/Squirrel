@@ -117,7 +117,7 @@ struct ContentView: View {
                         StepView(number: "3", title: "Accessibility")
                         StepView(number: "4", title: "Turn on for Squirrel")
                     }
-                    .foregroundColor(.blue)
+                    .contrast(0.6)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(12)
                     .background(Color.blue.opacity(0.08))
