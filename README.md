@@ -12,14 +12,16 @@ A menu bar app that adds scrolling to the simulator.
 
 ## Installation
 
-You can download Squirrel [directly](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip), or use Homebrew.
+You can download Squirrel on the [App Store](https://apps.apple.com/app/squirrel-for-simulator/id1669664068) here.
+
+Alternatively, get the [Zip file](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip), or use Homebrew:
 
 ```bash
 brew tap hkamran80/things
 brew install hkamran80/things/squirrel
 ```
 
-**Note:** Squirrel requires macOS Ventura (13.0) or higher. Big Sur support coming soon.
+**Note:** Squirrel requires macOS Big Sur (11.0) or higher.
 
 ## Screenshots
 
