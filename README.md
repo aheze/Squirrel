@@ -24,49 +24,9 @@ brew install hkamran80/things/squirrel
 
 ## Screenshots
 
-<table>
-
-<tr>
-<td>
-Main Menu
-</td>
-<td>
-Advanced Settings
-</td>
-</tr>
-
-<tr>
-</tr>
-  
-<tr>
-<td>
-<img src="Assets/MenuBar.png" alt="Menu Bar">
-</td>
-<td rowspan=5>
-<img src="Assets/MenuBar-Expanded.png" alt="Menu Bar Expanded">
-</td>
-</tr>
-
-<tr>
-</tr>
-  
-<tr>
-<td>
-Dark Mode
-</td>
-</tr>
-  
-<tr>
-</tr>
-
-  
-<tr>
-<td>
-<img src="Assets/MenuBar-Dark.png" alt="Menu Bar Dark Mode">
-</td>
-</tr>
- 
-</table>
+Main Menu | Advanced Settings
+--|--
+Light Mode<br><img src="Assets/MenuBar.png" alt="Menu Bar"><br>Dark Mode<br><img src="Assets/MenuBar-Dark.png" alt="Menu Bar Dark Mode"> | <img src="Assets/MenuBar-Expanded.png" alt="Menu Bar Expanded">
 
 <table>
 <tr>
