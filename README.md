@@ -126,8 +126,8 @@ https://user-images.githubusercontent.com/49819455/216271984-b6672a5f-72ad-40bd-
   - `Left Inset` - same as above for the left side.
   - `Right Inset` - same as above for the right side.
   - `Bottom Inset` - same as above for the bottom side.
-  - `Simulator Location` - the file path of the simulator, for `Launch Simulator on Startup`
-  - `Simulator Check Frequency` - how often to check if the simulator is alive, for `Quit If Simulator Is Closed`
+  - `Simulator Location` - the file path of the simulator, for `Launch Simulator on Startup`.
+  - `Simulator Check Frequency` - how often to check if the simulator is alive, for `Quit If Simulator Is Closed`.
   - `Max Height` - the maximum height of the menu popover.
   - `Menu Width` - the width of the menu popover.
 
