@@ -96,13 +96,20 @@ struct ContentView: View {
             /// Show a header when permissions aren't granted yet.
             if !viewModel.permissionsGranted {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("Accessibility Permissions Needed")
-                        .foregroundColor(.white)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(12)
-                        .background(Color.blue.brightness(-0.2))
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Accessibility Permissions Needed")
+                            .foregroundColor(.white)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+
+                        Text("Tap to open Accessibility settings")
+                            .foregroundColor(.white.opacity(0.7))
+                            .font(.body)
+                            .fontWeight(.medium)
+                    }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.blue.brightness(-0.2))
 
                     VStack(alignment: .leading, spacing: 8) {
                         StepView(number: "1", title: "Settings")
@@ -118,6 +125,12 @@ struct ContentView: View {
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .cornerRadius(6)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    if let accessibilityUrl = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
+                        NSWorkspace.shared.open(accessibilityUrl)
+                    }
+                }
             }
 
             VStack(alignment: .leading, spacing: 4.5) {
