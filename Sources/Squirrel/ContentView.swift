@@ -73,7 +73,24 @@ struct ContentView: View {
                 HStack(spacing: 8) {
                     SocialButton(image: "Twitter", url: "https://twitter.com/aheze0")
                     SocialButton(image: "GitHub", url: "https://github.com/aheze/Squirrel")
+
+                    Button {
+                        showingAbout.toggle()
+                    } label: {
+                        Image(systemName: "info.circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(NSColor.labelColor.color)
+                            .opacity(0.5)
+                    }
+                    .buttonStyle(.plain)
+                    .frame(width: 17, height: 17)
+                    .padding(.leading, 2)
                 }
+            }
+
+            if showingAbout {
+                aboutView
             }
 
             /// Show a header when permissions aren't granted yet.
@@ -127,25 +144,11 @@ struct ContentView: View {
                     Button {
                         viewModel.quitApplication()
                     } label: {
-                        HStack(spacing: 3) {
-                            Text("Quit")
-
-                            Image(systemName: "xmark")
-                        }
+                        Text("Quit")
                     }
                     .buttonStyle(.plain)
 
-                    Button {
-                        showingAbout.toggle()
-                    } label: {
-                        HStack(spacing: 3) {
-                            Text("About")
-
-                            Image(systemName: "chevron.right")
-                                .rotationEffect(.degrees(showingAbout ? 90 : 0))
-                        }
-                    }
-                    .buttonStyle(.plain)
+                    Spacer()
 
                     Button {
                         showingAdvanced.toggle()
@@ -161,100 +164,105 @@ struct ContentView: View {
                 }
                 .font(.footnote.bold())
                 .foregroundColor(NSColor.secondaryLabelColor.color)
-                .frame(maxWidth: .infinity, alignment: .trailing)
 
                 if showingAdvanced {
-                    Group {
-                        MenuToggleRow(title: "Launch Simulator On Startup", isOn: Binding {
-                            viewModel.launchSimulatorOnStartup
-                        } set: { newValue in
-                            viewModel.launchSimulatorOnStartup = newValue
-                            if newValue == false {
-                                viewModel.quitIfSimulatorClosed = false
-                            }
-                        })
-
-                        MenuToggleRow(title: "Quit If Simulator Is Closed", isOn: $viewModel.quitIfSimulatorClosed)
-                            .disabled(viewModel.launchSimulatorOnStartup == false)
-                    }
-
-                    Group {
-                        IntFieldRow(viewModel: viewModel, title: "Scroll Steps", value: $viewModel.numberOfScrollSteps)
-                        DoubleFieldRow(viewModel: viewModel, title: "Inactivity Timeout", value: $viewModel.scrollInactivityTimeout)
-                        DoubleFieldRow(viewModel: viewModel, title: "Scroll Interval", value: $viewModel.scrollInterval)
-                    }
-
-                    Group {
-                        DoubleFieldRow(viewModel: viewModel, title: "Top Inset", value: $viewModel.deviceBezelInsetTop)
-                        DoubleFieldRow(viewModel: viewModel, title: "Left Inset", value: $viewModel.deviceBezelInsetLeft)
-                        DoubleFieldRow(viewModel: viewModel, title: "Right Inset", value: $viewModel.deviceBezelInsetRight)
-                        DoubleFieldRow(viewModel: viewModel, title: "Bottom Inset", value: $viewModel.deviceBezelInsetBottom)
-                        PathFieldRow(viewModel: viewModel, title: "Simulator Location", value: $viewModel.simulatorPath)
-                        DoubleFieldRow(viewModel: viewModel, title: "Simulator Check Frequency", value: $viewModel.simulatorCheckFrequency)
-                    }
-
-                    Group {
-                        DoubleFieldRow(viewModel: viewModel, title: "Max Height", value: $viewModel.menuMaximumHeight)
-                        DoubleFieldRow(viewModel: viewModel, title: "Menu Width", value: $viewModel.menuWidth)
-                    }
-
-                    Button {
-                        viewModel.resetPreferences()
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text("Reset Preferences")
-
-                            Image(systemName: "arrow.counterclockwise")
-                        }
-                        .foregroundColor(NSColor.secondaryLabelColor.color)
-                        .font(.footnote.bold())
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.top, 4)
-                }
-
-                if showingAbout {
-                    VStack {
-                        Image("AppIcon-Base")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 160, height: 160)
-                            .overlay(
-                                Image("AppIcon-Wheel")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .shadow(color: .black.opacity(0.75), radius: 6, x: 0, y: 0)
-                                    .frame(width: 62, height: 62)
-                                    .rotationEffect(.degrees(animatingSpin ? 360 : 0))
-                                    .rotationEffect(.degrees(animatingSpinExtraAngle))
-                                    .offset(y: 3)
-                            )
-                            .onTapGesture {
-                                withAnimation(.spring(response: 1.2, dampingFraction: 1, blendDuration: 1)) {
-                                    animatingSpinExtraAngle += 90
-                                }
-                            }
-
-                        Text("Squirrel made by [aheze](https://twitter.com/aheze0)")
-                            .foregroundColor(NSColor.secondaryLabelColor.color)
-                            .fontWeight(.semibold)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 16)
-                    .padding(.bottom, 20)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
-                                animatingSpin = true
-                            }
-                        }
-                    }
-                    .onDisappear {
-                        animatingSpin = false
-                    }
+                    advancedView
                 }
             }
+        }
+    }
+
+    var advancedView: some View {
+        VStack(alignment: .leading, spacing: 4.5) {
+            Group {
+                MenuToggleRow(title: "Launch Simulator On Startup", isOn: Binding {
+                    viewModel.launchSimulatorOnStartup
+                } set: { newValue in
+                    viewModel.launchSimulatorOnStartup = newValue
+                    if newValue == false {
+                        viewModel.quitIfSimulatorClosed = false
+                    }
+                })
+
+                MenuToggleRow(title: "Quit If Simulator Is Closed", isOn: $viewModel.quitIfSimulatorClosed)
+                    .disabled(viewModel.launchSimulatorOnStartup == false)
+            }
+
+            Group {
+                IntFieldRow(viewModel: viewModel, title: "Scroll Steps", value: $viewModel.numberOfScrollSteps)
+                DoubleFieldRow(viewModel: viewModel, title: "Inactivity Timeout", value: $viewModel.scrollInactivityTimeout)
+                DoubleFieldRow(viewModel: viewModel, title: "Scroll Interval", value: $viewModel.scrollInterval)
+            }
+
+            Group {
+                DoubleFieldRow(viewModel: viewModel, title: "Top Inset", value: $viewModel.deviceBezelInsetTop)
+                DoubleFieldRow(viewModel: viewModel, title: "Left Inset", value: $viewModel.deviceBezelInsetLeft)
+                DoubleFieldRow(viewModel: viewModel, title: "Right Inset", value: $viewModel.deviceBezelInsetRight)
+                DoubleFieldRow(viewModel: viewModel, title: "Bottom Inset", value: $viewModel.deviceBezelInsetBottom)
+                PathFieldRow(viewModel: viewModel, title: "Simulator Location", value: $viewModel.simulatorPath)
+                DoubleFieldRow(viewModel: viewModel, title: "Simulator Check Frequency", value: $viewModel.simulatorCheckFrequency)
+            }
+
+            Group {
+                DoubleFieldRow(viewModel: viewModel, title: "Max Height", value: $viewModel.menuMaximumHeight)
+                DoubleFieldRow(viewModel: viewModel, title: "Menu Width", value: $viewModel.menuWidth)
+            }
+
+            Button {
+                viewModel.resetPreferences()
+            } label: {
+                HStack(spacing: 6) {
+                    Text("Reset Preferences")
+
+                    Image(systemName: "arrow.counterclockwise")
+                }
+                .foregroundColor(NSColor.secondaryLabelColor.color)
+                .font(.footnote.bold())
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 4)
+        }
+    }
+
+    var aboutView: some View {
+        VStack {
+            Image("AppIcon-Base")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 160, height: 160)
+                .overlay(
+                    Image("AppIcon-Wheel")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .shadow(color: .black.opacity(0.75), radius: 6, x: 0, y: 0)
+                        .frame(width: 62, height: 62)
+                        .rotationEffect(.degrees(animatingSpin ? 360 : 0))
+                        .rotationEffect(.degrees(animatingSpinExtraAngle))
+                        .offset(y: 3)
+                )
+                .onTapGesture {
+                    withAnimation(.spring(response: 1.2, dampingFraction: 1, blendDuration: 1)) {
+                        animatingSpinExtraAngle += 90
+                    }
+                }
+
+            Text("Squirrel made by [aheze](https://twitter.com/aheze0)")
+                .foregroundColor(NSColor.secondaryLabelColor.color)
+                .fontWeight(.semibold)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 16)
+        .padding(.bottom, 20)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+                    animatingSpin = true
+                }
+            }
+        }
+        .onDisappear {
+            animatingSpin = false
         }
     }
 }
