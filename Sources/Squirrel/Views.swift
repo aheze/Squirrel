@@ -48,7 +48,7 @@ struct StepView: View {
                     Circle()
                         .fill(.blue)
                         .brightness(-0.2)
-                        .opacity(0.08)
+                        .opacity(0.4)
                 )
 
             Text(title)

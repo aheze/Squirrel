@@ -12,12 +12,11 @@ A menu bar app that adds scrolling to the simulator.
 
 ## Installation
 
-You can download Squirrel on the [App Store](https://apps.apple.com/app/squirrel-for-simulator/id1669664068) here.
+You can download Squirrel on the [App Store](https://apps.apple.com/app/squirrel-for-simulator/id1669664068).
 
-Alternatively, get the [Zip file](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip), or use Homebrew:
+Alternatively, get the [ZIP file](https://github.com/aheze/Squirrel/releases/latest/download/Squirrel.zip), or use Homebrew:
 
 ```bash
-brew tap hkamran80/things
 brew install hkamran80/things/squirrel
 ```
 
@@ -107,9 +106,29 @@ https://user-images.githubusercontent.com/49819455/216271984-b6672a5f-72ad-40bd-
 
 ## Notes
 
-- Press <kbd>ESC</kbd> to stop scrolling, in case something bugs out.
-- Trackpad support is currently unstable. Most scroll wheels should work.
-
+- Press <kbd>ESC</kbd> to stop scrolling in case something bugs out.
+- Trackpad support is currently unstable, but most scroll wheels / mice should work.
+- Customization Reference - General:
+  - `Enabled` - whether Squirrel is active.
+  - `Natural Scrolling` - toggles the scroll direction.
+  - `Pointer Color` - the color of the cursor pointer.
+  - `Pointer Size` - the length of the pointer.
+  - `Pointer Opacity` - the opacity.
+  - `Pointer Scale` - scale the pointer by this when scrolling starts.
+- Customization Reference - Advanced:
+  - `Launch Simulator On Startup` - launch the Simulator when Squirrel starts.
+  - `Quit If Simulator Is Closed` - auto-quit the app when the Simulator isn't active.
+  - `Scroll Steps` - how many interations to get to the final scroll value.
+  - `Inactivity Timeout` - how many seconds to wait before stopping scroll.
+  - `Scroll Interval` - how often to execute a scroll step.
+  - `Top Inset` - top insets to cancel out simulator bezels. Only allow scrolling when the cursor falls inside the inset frame.
+  - `Left Inset` - same as above for the left side.
+  - `Right Inset` - same as above for the right side.
+  - `Bottom Inset` - same as above for the bottom side.
+  - `Simulator Location` - the file path of the simulator, for `Launch Simulator on Startup`.
+  - `Simulator Check Frequency` - how often to check if the simulator is alive, for `Quit If Simulator Is Closed`.
+  - `Max Height` - the maximum height of the menu popover.
+  - `Menu Width` - the width of the menu popover.
 
 ## Community
 
