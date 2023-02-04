@@ -107,8 +107,8 @@ https://user-images.githubusercontent.com/49819455/216271984-b6672a5f-72ad-40bd-
 
 ## Notes
 
-- Press <kbd>ESC</kbd> to stop scrolling, in case something bugs out.
-- Trackpad support is currently unstable. Most scroll wheels should work.
+- Press <kbd>ESC</kbd> to stop scrolling in case something bugs out.
+- Trackpad support is currently unstable, but most scroll wheels / mice should work.
 - Customization Reference - General:
   - `Enabled` - whether Squirrel is active.
   - `Natural Scrolling` - toggles the scroll direction.
