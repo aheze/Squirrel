@@ -44,12 +44,12 @@ struct StepView: View {
             Text(number)
                 .fontWeight(.medium)
                 .frame(width: 24, height: 24)
-                .background {
+                .background(
                     Circle()
                         .fill(.blue)
                         .brightness(-0.2)
                         .opacity(0.08)
-                }
+                )
 
             Text(title)
         }
@@ -69,7 +69,11 @@ struct DoubleFieldRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 8)
 
-            DoubleField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+            if #available(macOS 12.0, *) {
+                DoubleField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+            } else {
+                DoubleFieldOld(redrawPreferences: viewModel.redrawPreferences, value: $value)
+            }
         }
         .menuBackground()
     }
@@ -86,7 +90,11 @@ struct IntFieldRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 8)
 
-            IntField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+            if #available(macOS 12.0, *) {
+                IntField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+            } else {
+                IntFieldOld(redrawPreferences: viewModel.redrawPreferences, value: $value)
+            }
         }
         .menuBackground()
     }
@@ -103,104 +111,15 @@ struct PathFieldRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 8)
 
-            PathField(redrawPreferences: viewModel.redrawPreferences, value: $value)
-                .offset(y: -8)
+            if #available(macOS 12.0, *) {
+                PathField(redrawPreferences: viewModel.redrawPreferences, value: $value)
+                    .offset(y: -8)
+            } else {
+                PathFieldOld(redrawPreferences: viewModel.redrawPreferences, value: $value)
+                    .offset(y: -8)
+            }
         }
         .menuBackground()
-    }
-}
-
-struct DoubleField: View {
-    var redrawPreferences: PassthroughSubject<Void, Never>
-    @Binding var value: Double
-    @State var text = ""
-    @FocusState var focused: Bool
-
-    var body: some View {
-        TextField("Number", text: $text)
-            .multilineTextAlignment(.trailing)
-            .fixedSize(horizontal: true, vertical: false)
-            .focused($focused)
-            .focusable(false) /// Weird hack to stop it from focusing at first.
-            .onSubmit {
-                let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                if let double = Double(text) {
-                    value = double
-                } else {
-                    self.text = "\(value)"
-                }
-                focused = false
-            }
-            .onAppear {
-                text = "\(value)"
-                focused = false
-            }
-            .onReceive(redrawPreferences) { _ in
-                text = "\(value)"
-                focused = false
-            }
-    }
-}
-
-struct IntField: View {
-    var redrawPreferences: PassthroughSubject<Void, Never>
-    @Binding var value: Int
-    @State var text = ""
-    @FocusState var focused: Bool
-
-    var body: some View {
-        TextField("Integer", text: $text)
-            .multilineTextAlignment(.trailing)
-            .fixedSize(horizontal: true, vertical: false)
-            .focused($focused)
-            .focusable(false)
-            .onSubmit {
-                let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                if let int = Int(text) {
-                    value = int
-                } else {
-                    self.text = "\(value)"
-                }
-                focused = false
-            }
-            .onAppear {
-                text = "\(value)"
-                focused = false
-            }
-            .onReceive(redrawPreferences) { _ in
-                text = "\(value)"
-                focused = false
-            }
-    }
-}
-
-struct PathField: View {
-    var redrawPreferences: PassthroughSubject<Void, Never>
-    @Binding var value: String
-    @State var text: String = ""
-    @FocusState var focused: Bool
-
-    var body: some View {
-        TextField("Integer", text: $text)
-            .multilineTextAlignment(.leading)
-            .focused($focused)
-            .focusable(false)
-            .onSubmit {
-                if FileManager.default.fileExists(atPath: text) {
-                    value = text
-                } else {
-                    self.text = "\(value)"
-                }
-                focused = false
-            }
-            .onAppear {
-                text = "\(value)"
-                focused = false
-            }
-            .onReceive(redrawPreferences) { _ in
-                text = "\(value)"
-                focused = false
-            }
     }
 }
 
@@ -243,5 +162,177 @@ struct SocialButton: View {
         }
         .buttonStyle(.plain)
         .frame(width: 19, height: 19)
+    }
+}
+
+// MARK: - Text field views
+
+@available(macOS 12.0, *)
+struct DoubleField: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
+    @Binding var value: Double
+    @State var text = ""
+    @FocusState var focused: Bool
+
+    var body: some View {
+        TextField("Number", text: $text)
+            .multilineTextAlignment(.trailing)
+            .fixedSize(horizontal: true, vertical: false)
+            .focused($focused)
+            .focusable(false) /// Weird hack to stop it from focusing at first.
+            .onSubmit {
+                let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                if let double = Double(text) {
+                    value = double
+                } else {
+                    self.text = "\(value)"
+                }
+                focused = false
+            }
+            .onAppear {
+                text = "\(value)"
+                focused = false
+            }
+            .onReceive(redrawPreferences) { _ in
+                text = "\(value)"
+                focused = false
+            }
+    }
+}
+
+@available(macOS 12.0, *)
+struct IntField: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
+    @Binding var value: Int
+    @State var text = ""
+    @FocusState var focused: Bool
+
+    var body: some View {
+        TextField("Integer", text: $text)
+            .multilineTextAlignment(.trailing)
+            .fixedSize(horizontal: true, vertical: false)
+            .focused($focused)
+            .focusable(false)
+            .onSubmit {
+                let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                if let int = Int(text) {
+                    value = int
+                } else {
+                    self.text = "\(value)"
+                }
+                focused = false
+            }
+            .onAppear {
+                text = "\(value)"
+                focused = false
+            }
+            .onReceive(redrawPreferences) { _ in
+                text = "\(value)"
+                focused = false
+            }
+    }
+}
+
+@available(macOS 12.0, *)
+struct PathField: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
+    @Binding var value: String
+    @State var text: String = ""
+    @FocusState var focused: Bool
+
+    var body: some View {
+        TextField("Integer", text: $text)
+            .multilineTextAlignment(.leading)
+            .focused($focused)
+            .focusable(false)
+            .onSubmit {
+                if FileManager.default.fileExists(atPath: text) {
+                    value = text
+                } else {
+                    self.text = "\(value)"
+                }
+                focused = false
+            }
+            .onAppear {
+                text = "\(value)"
+                focused = false
+            }
+            .onReceive(redrawPreferences) { _ in
+                text = "\(value)"
+                focused = false
+            }
+    }
+}
+
+struct DoubleFieldOld: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
+    @Binding var value: Double
+    @State var text = ""
+
+    var body: some View {
+        TextField("Number", text: $text) {
+            let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let double = Double(text) {
+                value = double
+            } else {
+                self.text = "\(value)"
+            }
+        }
+        .multilineTextAlignment(.trailing)
+        .fixedSize(horizontal: true, vertical: false)
+        .onAppear {
+            text = "\(value)"
+        }
+        .onReceive(redrawPreferences) { _ in
+            text = "\(value)"
+        }
+    }
+}
+
+struct IntFieldOld: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
+    @Binding var value: Int
+    @State var text = ""
+
+    var body: some View {
+        TextField("Integer", text: $text) {
+            let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let int = Int(text) {
+                value = int
+            } else {
+                self.text = "\(value)"
+            }
+        }
+        .multilineTextAlignment(.trailing)
+        .fixedSize(horizontal: true, vertical: false)
+        .onAppear {
+            text = "\(value)"
+        }
+        .onReceive(redrawPreferences) { _ in
+            text = "\(value)"
+        }
+    }
+}
+
+struct PathFieldOld: View {
+    var redrawPreferences: PassthroughSubject<Void, Never>
+    @Binding var value: String
+    @State var text: String = ""
+
+    var body: some View {
+        TextField("Integer", text: $text) {
+            if FileManager.default.fileExists(atPath: text) {
+                value = text
+            } else {
+                self.text = "\(value)"
+            }
+        }
+        .multilineTextAlignment(.leading)
+        .onAppear {
+            text = "\(value)"
+        }
+        .onReceive(redrawPreferences) { _ in
+            text = "\(value)"
+        }
     }
 }

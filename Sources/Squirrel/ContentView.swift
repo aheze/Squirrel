@@ -220,7 +220,7 @@ struct ContentView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 160, height: 160)
-                            .overlay {
+                            .overlay(
                                 Image("AppIcon-Wheel")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -229,7 +229,7 @@ struct ContentView: View {
                                     .rotationEffect(.degrees(animatingSpin ? 360 : 0))
                                     .rotationEffect(.degrees(animatingSpinExtraAngle))
                                     .offset(y: 3)
-                            }
+                            )
                             .onTapGesture {
                                 withAnimation(.spring(response: 1.2, dampingFraction: 1, blendDuration: 1)) {
                                     animatingSpinExtraAngle += 90
