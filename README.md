@@ -116,10 +116,10 @@ https://user-images.githubusercontent.com/49819455/216271984-b6672a5f-72ad-40bd-
   - `Pointer Opacity` - the opacity.
   - `Pointer Scale` - scale the pointer by this when scrolling starts.
 - Customization Reference - Advanced:
-  - `Launch Simulator on Startup` - launch the Simulator when Squirrel starts.
+  - `Launch Simulator On Startup` - launch the Simulator when Squirrel starts.
   - `Quit If Simulator Is Closed` - auto-quit the app when the Simulator isn't active.
   - `Scroll Steps` - how many interations to get to the final scroll value.
-  - `Inactivity Timeouyt` - how many seconds to wait before stopping scroll.
+  - `Inactivity Timeout` - how many seconds to wait before stopping scroll.
   - `Scroll Interval` - how often to execute a scroll step.
   - `Top Inset` - top insets to cancel out simulator bezels. Only allow scrolling when the cursor falls inside the inset frame.
   - `Left Inset` - same as above for the left side.
