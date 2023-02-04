@@ -235,9 +235,14 @@ struct ContentView: View {
                     .padding(.top, 16)
                     .padding(.bottom, 20)
                     .onAppear {
-                        withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
-                            animatingSpin = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+                                animatingSpin = true
+                            }
                         }
+                    }
+                    .onDisappear {
+                        animatingSpin = false
                     }
                 }
             }
