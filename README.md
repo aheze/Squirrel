@@ -12,9 +12,9 @@ A menu bar app that adds scrolling to the simulator.
 
 ## Installation
 
-You can download Squirrel on the [App Store](https://apps.apple.com/app/squirrel-for-simulator/id1669664068) here.
+You can download Squirrel on the [App Store](https://apps.apple.com/app/squirrel-for-simulator/id1669664068).
 
-Alternatively, get the [Zip file](https://github.com/aheze/Squirrel/blob/main/Squirrel.zip), or use Homebrew:
+Alternatively, get the [ZIP file](https://github.com/aheze/Squirrel/releases/latest/download/Squirrel.zip), or use Homebrew:
 
 ```bash
 brew tap hkamran80/things
