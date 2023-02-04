@@ -107,8 +107,26 @@ https://user-images.githubusercontent.com/49819455/216271984-b6672a5f-72ad-40bd-
 
 ## Notes
 
+### General
 - Press <kbd>ESC</kbd> to stop scrolling, in case something bugs out.
 - Trackpad support is currently unstable. Most scroll wheels should work.
+
+### Customization Reference
+- `Enabled` - whether Squirrel is active.
+- `Natural Scrolling` - toggles the scroll direction.
+- `Pointer Color` - the color of the cursor pointer.
+- `Pointer Size` - the length of the pointer.
+- `Pointer Opacity` - the opacity.
+- `Pointer Scale` - scale the pointer by this when scrolling starts.
+- `Launch Simulator on Startup` - launch the Simulator when Squirrel starts.
+- `Quit If Simulator Is Closed` - auto-quit the app when the Simulator isn't active.
+- `Scroll Steps` - how many interations to get to the final scroll value.
+- `Inactivity Timeouyt` - how many seconds to wait before stopping scroll.
+- `Scroll Interval` - how often to execute a scroll step.
+- `Top Inset` - top insets to cancel out simulator bezels. Only allow scrolling when the cursor falls inside the inset frame.
+- `Left Inset` - same as above for the left side.
+- `Right Inset` - same as above for the right side.
+- `Bottom Inset` - same as above for the bottom side.
 
 
 ## Community
