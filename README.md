@@ -17,7 +17,7 @@ You can download Squirrel on the [App Store](https://apps.apple.com/app/squirrel
 Alternatively, get the [ZIP file](https://github.com/aheze/Squirrel/releases/latest/download/Squirrel.zip), or use Homebrew:
 
 ```bash
-brew install hkamran80/things/squirrel
+brew install hkamran80/things/squirrel-for-simulator
 ```
 
 **Note:** Squirrel requires macOS Big Sur (11.0) or higher.
