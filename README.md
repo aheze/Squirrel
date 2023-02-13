@@ -78,7 +78,7 @@ https://user-images.githubusercontent.com/49819455/216271984-b6672a5f-72ad-40bd-
 - Customization Reference - Advanced:
   - `Launch Simulator On Startup` - launch the Simulator when Squirrel starts.
   - `Quit If Simulator Is Closed` - auto-quit the app when the Simulator isn't active.
-  - `Scroll Steps` - how many interations to get to the final scroll value.
+  - `Scroll Steps` - how many iterations to get to the final scroll value.
   - `Inactivity Timeout` - how many seconds to wait before stopping scroll.
   - `Scroll Interval` - how often to execute a scroll step.
   - `Top Inset` - top insets to cancel out simulator bezels. Only allow scrolling when the cursor falls inside the inset frame.
