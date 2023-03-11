@@ -113,7 +113,7 @@ struct ContentView: View {
 
                     VStack(alignment: .leading, spacing: 8) {
                         StepView(number: "1", title: "Settings")
-                        StepView(number: "2", title: "Privacy & Security")
+                        StepView(number: "2", title: "Security & Privacy")
                         StepView(number: "3", title: "Accessibility")
                         StepView(number: "4", title: "Turn on for Squirrel")
                     }
